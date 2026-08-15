@@ -1,0 +1,77 @@
+/* Modern chart container styles */
+.chart-container {
+  @apply bg-white dark:bg-card rounded-xl border border-border/40 p-4 shadow-sm transition-all duration-200 hover:shadow-md;
+}
+
+/* Card styles */
+.kpi-card {
+  @apply relative overflow-hidden bg-card/95 dark:bg-card/90 
+         rounded-xl border border-border/40 p-5 shadow-sm transition-all duration-200 
+         hover:shadow-md hover:border-primary/20 hover:translate-y-[-2px];
+}
+
+.kpi-card .card-value {
+  @apply text-2xl font-bold text-foreground dark:text-white mt-2 mb-1;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.kpi-card .card-title {
+  @apply text-sm font-medium text-muted-foreground dark:text-muted-foreground/90 mb-1;
+}
+
+.kpi-card .card-change {
+  @apply text-xs font-medium inline-flex items-center mt-1;
+}
+
+.kpi-card .card-change.positive {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.kpi-card .card-change.negative {
+  @apply text-red-600 dark:text-red-400;
+}
+
+.kpi-card .card-icon {
+  @apply absolute right-4 top-4 h-10 w-10 rounded-full flex items-center justify-center 
+         bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-foreground;
+  transition: all 0.2s ease;
+}
+
+/* Chart tooltip */
+.chart-tooltip {
+  @apply bg-white dark:bg-card border border-border/50 rounded-lg shadow-lg p-3 text-sm;
+}
+
+.chart-tooltip-label {
+  @apply font-medium text-foreground/90;
+}
+
+.chart-tooltip-value {
+  @apply font-bold text-foreground text-base;
+}
+
+/* Chart grid lines */
+.recharts-cartesian-grid line {
+  @apply stroke-border/30 dark:stroke-border/20;
+}
+
+/* Chart axis styles */
+.recharts-cartesian-axis-tick text {
+  @apply text-xs fill-muted-foreground/70 dark:fill-muted-foreground/60;
+}
+
+/* Chart legend */
+.recharts-legend-item {
+  @apply text-sm text-muted-foreground/80 dark:text-muted-foreground/70;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .kpi-card {
+    @apply p-4;
+  }
+  
+  .kpi-card .card-value {
+    @apply text-xl;
+  }
+}
