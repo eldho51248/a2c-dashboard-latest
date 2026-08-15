@@ -386,7 +386,7 @@ export function RegistryStat({
 
   return (
     <div
-      className="flex min-w-0 items-center gap-2.5 rounded-xl border px-3 py-2"
+      className="flex min-w-0 items-center gap-2 rounded-xl border px-2.5 py-2"
       style={{
         background: wash ? `linear-gradient(135deg, ${wash.from} 0%, ${wash.to} 100%)` : REGISTRY_COLORS.card,
         borderColor: wash ? wash.border : REGISTRY_COLORS.line,
@@ -414,13 +414,13 @@ export function RegistryStat({
         </div>
         <div className="flex items-baseline gap-1">
           <span
-            className="truncate text-[18px] font-bold leading-[1.2] tracking-[-0.5px]"
+            className="truncate text-[19px] font-bold leading-[1.15] tracking-[-0.6px] @[1100px]:text-[23px]"
             style={{ color: valueColor || REGISTRY_COLORS.ink }}
           >
             {loading ? "—" : value}
           </span>
           {unit && !loading && (
-            <span className="text-[11px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
+            <span className="text-[11px] font-semibold @[1100px]:text-[12.5px]" style={{ color: REGISTRY_COLORS.ink2 }}>
               {unit}
             </span>
           )}
@@ -721,6 +721,7 @@ export function BarList({
   formatter = (value: number) => formatFull(Math.round(value)),
   emptyMessage = "No data for the current filters",
   colors = BRIGHT_SERIES as unknown as string[],
+  dense = false,
 }: {
   items: Array<{ name: string; value: number }>
   unitLabel: string
@@ -728,28 +729,45 @@ export function BarList({
   emptyMessage?: string
   /** Per-row bar colours, cycled by row index. */
   colors?: string[]
+  /** Tighter spacing that stretches to the parent's height, for single-screen bands. */
+  dense?: boolean
 }) {
   const max = items.reduce((acc, item) => Math.max(acc, item.value), 0)
   const axis = niceAxis(max)
 
   if (!items.length) {
-    return <EmptyPanel message={emptyMessage} className="px-4 pb-4 pt-2" />
+    return <EmptyPanel message={emptyMessage} className={dense ? "px-3 pb-2 pt-1" : "px-4 pb-4 pt-2"} />
   }
 
   return (
-    <div className="px-4 pb-4 pt-2.5">
-      <div className="mb-1.5 flex justify-between text-[10px]" style={{ color: REGISTRY_COLORS.muted }}>
+    <div className={dense ? "flex min-h-0 flex-1 flex-col px-3 pb-2 pt-1" : "px-4 pb-4 pt-2.5"}>
+      <div
+        className={`flex justify-between ${dense ? "mb-1 flex-none text-[9.5px]" : "mb-1.5 text-[10px]"}`}
+        style={{ color: REGISTRY_COLORS.muted }}
+      >
         <span />
         <span>{unitLabel}</span>
       </div>
 
-      <div className="grid gap-1.5">
+      <div className={dense ? "grid flex-none gap-1" : "grid gap-1.5"}>
         {items.map((item, index) => (
-          <div key={item.name} className="grid grid-cols-[58px_minmax(0,1fr)_auto] items-center gap-2">
-            <span className="truncate text-[11.5px]" style={{ color: REGISTRY_COLORS.ink2 }} title={item.name}>
+          <div
+            key={item.name}
+            className={`grid items-center gap-2 ${
+              dense ? "grid-cols-[52px_minmax(0,1fr)_auto]" : "grid-cols-[58px_minmax(0,1fr)_auto]"
+            }`}
+          >
+            <span
+              className={`truncate ${dense ? "text-[10.5px]" : "text-[11.5px]"}`}
+              style={{ color: REGISTRY_COLORS.ink2 }}
+              title={item.name}
+            >
               {item.name}
             </span>
-            <span className="relative h-[13px] overflow-hidden rounded-[3px]" style={{ background: "#F3F6F4" }}>
+            <span
+              className={`relative overflow-hidden rounded-[3px] ${dense ? "h-[11px]" : "h-[13px]"}`}
+              style={{ background: "#F3F6F4" }}
+            >
               <span
                 className="block h-full rounded-[3px]"
                 style={{
@@ -759,7 +777,9 @@ export function BarList({
               />
             </span>
             <span
-              className="min-w-[52px] whitespace-nowrap text-right text-[11px] font-semibold"
+              className={`whitespace-nowrap text-right font-semibold ${
+                dense ? "min-w-[46px] text-[10.5px]" : "min-w-[52px] text-[11px]"
+              }`}
               style={{ color: REGISTRY_COLORS.ink2 }}
             >
               {formatter(item.value)}
@@ -769,13 +789,15 @@ export function BarList({
       </div>
 
       <div
-        className="relative mt-2 ml-[66px] mr-[60px] h-4 border-t"
+        className={`relative border-t ${
+          dense ? "mt-1 ml-[60px] mr-[54px] h-3.5 flex-none" : "mt-2 ml-[66px] mr-[60px] h-4"
+        }`}
         style={{ borderColor: REGISTRY_COLORS.line2 }}
       >
         {axis.ticks.map((tick, index) => (
           <span
             key={tick}
-            className="absolute top-1 -translate-x-1/2 text-[9.5px]"
+            className={`absolute -translate-x-1/2 ${dense ? "top-0.5 text-[9px]" : "top-1 text-[9.5px]"}`}
             style={{
               left: `${(index / (axis.ticks.length - 1)) * 100}%`,
               color: REGISTRY_COLORS.muted,
@@ -933,6 +955,7 @@ export function RankList({
   formatter = (value: number) => formatFull(Math.round(value)),
   footer,
   emptyMessage = "No data for the current filters",
+  dense = false,
 }: {
   items: Array<{ name: string; value: number }>
   nameHeader: string
@@ -940,48 +963,70 @@ export function RankList({
   formatter?: (value: number) => string
   footer?: React.ReactNode
   emptyMessage?: string
+  /** Tighter spacing that stretches to the parent's height, for single-screen bands. */
+  dense?: boolean
 }) {
   const max = items.reduce((acc, item) => Math.max(acc, item.value), 0)
 
   if (!items.length) {
-    return <EmptyPanel message={emptyMessage} className="px-4 pb-4 pt-2" />
+    return <EmptyPanel message={emptyMessage} className={dense ? "px-3 pb-2 pt-1" : "px-4 pb-4 pt-2"} />
   }
 
   return (
-    <div className="px-4 pb-3 pt-2.5">
+    <div className={dense ? "flex min-h-0 flex-1 flex-col px-3 pb-2 pt-1" : "px-4 pb-3 pt-2.5"}>
       <div
-        className="mb-1 flex justify-between border-b pb-1.5 text-[10px]"
+        className={`flex justify-between border-b ${
+          dense ? "mb-1 flex-none pb-1 text-[9.5px]" : "mb-1 pb-1.5 text-[10px]"
+        }`}
         style={{ borderColor: REGISTRY_COLORS.line2, color: REGISTRY_COLORS.muted }}
       >
         <span>{nameHeader}</span>
         <span>{valueHeader}</span>
       </div>
 
-      {items.map((item, index) => (
-        <div key={item.name} className="grid grid-cols-[18px_84px_minmax(0,1fr)_auto] items-center gap-2 py-[5px]">
-          <span
-            className="grid h-4 w-4 place-items-center rounded-[4px] text-[9.5px] font-bold"
-            style={{ background: "#F3F6F4", color: REGISTRY_COLORS.muted }}
+      <div className={dense ? "grid flex-none gap-[3px]" : ""}>
+        {items.map((item, index) => (
+          <div
+            key={item.name}
+            className={`grid items-center gap-2 ${
+              dense ? "grid-cols-[16px_74px_minmax(0,1fr)_auto]" : "grid-cols-[18px_84px_minmax(0,1fr)_auto] py-[5px]"
+            }`}
           >
-            {index + 1}
-          </span>
-          <span className="truncate text-[11.5px]" style={{ color: REGISTRY_COLORS.ink2 }} title={item.name}>
-            {item.name}
-          </span>
-          <span className="h-2 overflow-hidden rounded-[3px]" style={{ background: "#F3F6F4" }}>
             <span
-              className="block h-full rounded-[3px]"
-              style={{
-                width: `${max > 0 ? (item.value / max) * 100 : 0}%`,
-                background: BRIGHT.blueSoft,
-              }}
-            />
-          </span>
-          <span className="whitespace-nowrap text-[11px] font-semibold">{formatter(item.value)}</span>
-        </div>
-      ))}
+              className={`grid place-items-center rounded-[4px] font-bold ${
+                dense ? "h-[15px] w-[15px] text-[9px]" : "h-4 w-4 text-[9.5px]"
+              }`}
+              style={{ background: "#F3F6F4", color: REGISTRY_COLORS.muted }}
+            >
+              {index + 1}
+            </span>
+            <span
+              className={`truncate ${dense ? "text-[10.5px]" : "text-[11.5px]"}`}
+              style={{ color: REGISTRY_COLORS.ink2 }}
+              title={item.name}
+            >
+              {item.name}
+            </span>
+            <span
+              className={`overflow-hidden rounded-[3px] ${dense ? "h-[7px]" : "h-2"}`}
+              style={{ background: "#F3F6F4" }}
+            >
+              <span
+                className="block h-full rounded-[3px]"
+                style={{
+                  width: `${max > 0 ? (item.value / max) * 100 : 0}%`,
+                  background: BRIGHT.blueSoft,
+                }}
+              />
+            </span>
+            <span className={`whitespace-nowrap font-semibold ${dense ? "text-[10.5px]" : "text-[11px]"}`}>
+              {formatter(item.value)}
+            </span>
+          </div>
+        ))}
+      </div>
 
-      {footer && <div className="mt-2">{footer}</div>}
+      {footer && <div className={dense ? "mt-1 flex-none" : "mt-2"}>{footer}</div>}
     </div>
   )
 }

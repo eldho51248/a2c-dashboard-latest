@@ -63,7 +63,7 @@ interface EthiopiaMapProps {
   height?: string;
   /** Registry variant only: stretch to the parent's height instead of holding a 4:3 box. */
   fill?: boolean;
-  /** Registry variant only: float the ramp legend over the map instead of stacking it below. */
+  /** Floats the ramp key over the map instead of stacking it below. */
   legendPosition?: 'below' | 'overlay';
 }
 
@@ -291,7 +291,7 @@ export function EthiopiaMap({
   childChartKeys,
   height = '600px',
   fill = false,
-  legendPosition = 'below',
+  legendPosition = 'overlay',
 }: EthiopiaMapProps) {
   const isRegistry = variant === 'registry';
   const formatValue = useCallback(
@@ -730,16 +730,16 @@ export function EthiopiaMap({
     return Math.max(...featureShapes.map(f => f.farmerCount));
   }, [featureShapes]);
 
-  // Registry breakpoints split the non-zero range into four quartile-ish bands so
-  // sparse woredas stay visible instead of washing out against the top value.
+  // Breakpoints split the non-zero range into four quartile-ish bands so sparse
+  // woredas stay visible instead of washing out against the top value.
   const rampBreaks = useMemo(() => {
-    if (!isRegistry || maxFarmerCount <= 0) return null;
+    if (maxFarmerCount <= 0) return null;
     return [
       Math.max(1, Math.round(maxFarmerCount * 0.08)),
       Math.max(2, Math.round(maxFarmerCount * 0.25)),
       Math.max(3, Math.round(maxFarmerCount * 0.55)),
     ];
-  }, [isRegistry, maxFarmerCount]);
+  }, [maxFarmerCount]);
 
   const rampLabels = useMemo(() => buildRampLabels(rampBreaks, formatValue), [rampBreaks, formatValue]);
 
@@ -758,6 +758,12 @@ export function EthiopiaMap({
     const lightness = 75 - ratio * 45; // 75% -> 30%
     return `hsl(120, 100%, ${lightness}%)`;
   };
+
+  // Sampling the fill scale at each band's upper bound keeps the key's swatches
+  // truthful for both the registry ramp and the continuous default scale.
+  const legendColors = [0, ...(rampBreaks ?? [0, 0, 0]), maxFarmerCount].map(count =>
+    getFeatureColor(count, maxFarmerCount)
+  );
 
   const isFeatureSelected = useCallback((feature: GeoJSONFeature) => {
     return (
@@ -979,16 +985,16 @@ export function EthiopiaMap({
           </Button>
         </div>
         
-        {isRegistry && legendPosition === 'overlay' && (
+        {legendPosition === 'overlay' && (
           <div
-            className="absolute right-3 top-12 z-10 rounded-lg border border-[#E6EAE8] bg-white/95 px-2 py-1.5 shadow-sm backdrop-blur-sm"
+            className="absolute right-3 top-12 z-10 max-w-[48%] rounded-lg border border-[#E6EAE8] bg-white/95 px-2 py-1.5 shadow-sm backdrop-blur-sm"
           >
             <div className="mb-1 text-[9px] font-semibold uppercase tracking-wide text-[#6B7280]">
               {valueLabel} per {mapLevel.type.replace(/s$/, '')}
             </div>
             <div className="grid gap-[3px]">
-              {REGISTRY_RAMP.map((color, index) => (
-                <span key={color} className="flex items-center gap-1.5 text-[9.5px] text-[#4B5563]">
+              {legendColors.map((color, index) => (
+                <span key={`${color}-${index}`} className="flex items-center gap-1.5 text-[9.5px] text-[#4B5563]">
                   <span
                     className="h-2 w-2 flex-none rounded-[2px] border border-black/5"
                     style={{ background: color }}
@@ -1112,14 +1118,14 @@ export function EthiopiaMap({
         )}
       </div>
 
-      {isRegistry && legendPosition === 'below' && (
+      {legendPosition === 'below' && (
         <div className={fill ? 'flex-none px-3 pb-2 pt-1' : 'px-4 pb-3.5 pt-1'}>
           <div className="mb-1.5 text-[10.5px] text-[#6B7280]">
             {valueLabel.charAt(0).toUpperCase() + valueLabel.slice(1)} per {mapLevel.type.replace(/s$/, '')}
           </div>
           <div className="grid h-[9px] grid-cols-5 overflow-hidden rounded-[3px]">
-            {REGISTRY_RAMP.map(color => (
-              <span key={color} style={{ background: color }} />
+            {legendColors.map((color, index) => (
+              <span key={`${color}-${index}`} style={{ background: color }} />
             ))}
           </div>
           <div className="mt-1 grid grid-cols-5 text-[10px] text-[#6B7280]">

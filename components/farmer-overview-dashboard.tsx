@@ -53,6 +53,7 @@ import {
   toNumber,
   useRegistryTrend,
 } from "@/components/registry/registry-data"
+import { ExportDataButton } from "@/components/registry/export-button"
 
 const CHART_NAMES = [
   "farmerKpis",
@@ -273,7 +274,7 @@ export function FarmerOverviewDashboard({
       className="flex h-full min-h-0 flex-col gap-3 @[860px]:grid @[860px]:grid-rows-[auto_minmax(0,182fr)_minmax(0,180fr)_minmax(0,107fr)_auto]"
     >
       {/* Band 1 — KPI ribbon (six tiles, content-weighted widths) */}
-      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[860px]:grid-cols-[1.49fr_1.37fr_1.5fr_1.21fr_0.92fr_1.42fr]">
+      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[860px]:grid-cols-[1.4fr_1.26fr_1.4fr_1.18fr_1.18fr_1.38fr]">
         <RegistryStat
           icon={<Users className="h-7 w-7" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.blue}
@@ -803,7 +804,7 @@ export function FarmerOverviewDashboard({
 
       {/* Goal ribbon */}
       <div
-        className="flex flex-none items-center gap-2 rounded-xl border px-4 py-2 text-[11px]"
+        className="flex flex-none items-center gap-2 rounded-xl border px-4 py-1 text-[11px]"
         style={{ borderColor: "#CBE9D6", background: REGISTRY_COLORS.g100, color: REGISTRY_COLORS.g900 }}
       >
         <strong className="font-semibold">Our Goal:</strong>
@@ -812,6 +813,11 @@ export function FarmerOverviewDashboard({
           services in Ethiopia.
         </span>
         <Leaf className="h-4 w-4 flex-none" style={{ color: REGISTRY_COLORS.g700 }} />
+        <ExportDataButton
+          filters={filters}
+          filePrefix="farmer-profiles"
+          captureTargetId="dashboard-overview"
+        />
       </div>
     </div>
   )

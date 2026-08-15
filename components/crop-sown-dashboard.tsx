@@ -1,10 +1,11 @@
 "use client"
 
 // Crop Sown Registry view. Rendered in place of the tabbed dashboard whenever the
-// Farming Type filter is set to crop farming.
+// Farming Type filter is set to crop farming. Laid out as a single screen with no
+// scrolling, using the same band grid and panel density as the landing overview.
 
 import { useMemo } from "react"
-import { Ruler, Sprout, Users, Wheat } from "lucide-react"
+import { MapPinned, Ruler, Sprout, Users, Wheat } from "lucide-react"
 import {
   Bar,
   BarChart,
@@ -22,12 +23,13 @@ import {
   BarList,
   BRIGHT,
   BRIGHT_SOFT,
+  DeltaChip,
   EmptyPanel,
   RankList,
   REGISTRY_COLORS,
   RegistryCard,
   RegistryDonut,
-  RegistryKpi,
+  RegistryStat,
   formatCompact,
   formatFull,
 } from "@/components/registry/registry-ui"
@@ -38,6 +40,7 @@ import {
   toNumber,
   useRegistryTrend,
 } from "@/components/registry/registry-data"
+import { ExportDataButton } from "@/components/registry/export-button"
 
 const CHART_NAMES = [
   "cropKpis",
@@ -81,12 +84,15 @@ export function CropSownDashboard({
   const cropTypes = toNumber(kpis?.crop_types)
   const avgPlotSize = toNumber(kpis?.avg_plot_size)
   const woredasReporting = toNumber(kpis?.woredas_reporting)
+  const ownedShare = totalArea > 0 ? (ownedArea / totalArea) * 100 : 0
 
   const trend = useRegistryTrend(charts.registryTrendByMonth)
 
+  // Panels are height-capped in the band grid, so the longest tails are trimmed
+  // rather than allowed to overflow their card.
   const areaByCrop = useMemo(
     () =>
-      (charts.cropAreaByCrop || []).map((row: any) => ({
+      (charts.cropAreaByCrop || []).slice(0, 10).map((row: any) => ({
         name: row.crop,
         value: toNumber(row.area),
       })),
@@ -105,7 +111,7 @@ export function CropSownDashboard({
 
   const topWoredas = useMemo(
     () =>
-      (charts.cropTopWoredas || []).slice(0, 5).map((row: any) => ({
+      (charts.cropTopWoredas || []).slice(0, 8).map((row: any) => ({
         name: row.woreda,
         value: toNumber(row.area),
       })),
@@ -119,7 +125,7 @@ export function CropSownDashboard({
           name: row.ownership_type,
           value: toNumber(row.parcels),
           color: TENURE_COLORS[row.ownership_type] || BRIGHT.violet,
-          sub: `${formatFull(Math.round(toNumber(row.area)))} ha`,
+          sub: `${formatCompact(toNumber(row.area))} ha`,
         }))
         .filter((segment: { value: number }) => segment.value > 0),
     [charts.landTenureSplit]
@@ -148,88 +154,109 @@ export function CropSownDashboard({
   if (error) {
     return (
       <RegistryCard title="Crop Sown Registry">
-        <div className="px-4 pb-5 pt-3 text-[12px] text-[#B42318]">Failed to load registry data: {error}</div>
+        <div className="px-4 pb-5 pt-3 text-[12px]" style={{ color: REGISTRY_COLORS.red }}>
+          Failed to load registry data: {error}
+        </div>
       </RegistryCard>
     )
   }
 
   return (
-    <div className="space-y-3">
-      <header className="flex flex-wrap items-start gap-3">
-        <div>
-          <h2 className="text-[23px] font-bold leading-tight tracking-[-0.4px]" style={{ color: REGISTRY_COLORS.ink }}>
-            Crop Sown Registry
-          </h2>
-          <p className="mt-0.5 text-[12.5px]" style={{ color: REGISTRY_COLORS.muted }}>
-            National Crop Sown Registry Module
-          </p>
-        </div>
+    <div className="flex h-full min-h-0 flex-col gap-3 @[860px]:grid @[860px]:grid-rows-[auto_auto_minmax(0,1.32fr)_minmax(0,1fr)_auto]">
+      {/* Title line */}
+      <header className="flex flex-none flex-wrap items-baseline gap-x-2 gap-y-0.5">
+        <h2 className="text-[16px] font-bold leading-tight tracking-[-0.3px]" style={{ color: REGISTRY_COLORS.ink }}>
+          Crop Sown Registry
+        </h2>
+        <p className="text-[11px]" style={{ color: REGISTRY_COLORS.muted }}>
+          National Crop Sown Registry Module
+        </p>
       </header>
 
-      <section className="grid grid-cols-1 gap-3 @[560px]:grid-cols-2 @[1080px]:grid-cols-4">
-        <RegistryKpi
-          icon={<Sprout className="h-8 w-8" strokeWidth={2.4} />}
+      {/* Band 1 — KPI ribbon */}
+      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[860px]:grid-cols-[1.07fr_1.08fr_0.82fr_1.04fr_0.94fr_1.05fr]">
+        <RegistryStat
+          icon={<Sprout className="h-7 w-7" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.green}
           iconColor={BRIGHT.green}
           tint="green"
-          value={formatFull(Math.round(totalArea))}
+          value={formatCompact(totalArea)}
           unit="ha"
           label="Hectares Sown"
           delta={areaTrend.delta}
-          spark={areaTrend.spark}
-          sparkColor={BRIGHT.green}
           loading={loading}
         />
-        <RegistryKpi
-          icon={<Users className="h-8 w-8" strokeWidth={2.4} />}
+        <RegistryStat
+          icon={<Users className="h-7 w-7" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           tint="blue"
           value={formatFull(farmers)}
           label="Farmers Reporting"
           delta={farmerTrend.delta}
-          spark={farmerTrend.spark}
-          sparkColor={BRIGHT.blue}
           loading={loading}
         />
-        <RegistryKpi
-          icon={<Wheat className="h-8 w-8" strokeWidth={2.4} />}
+        <RegistryStat
+          icon={<Wheat className="h-7 w-7" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.orange}
           iconColor={BRIGHT.orange}
           tint="peach"
           value={formatFull(cropTypes)}
           label="Crop Types"
-          spark={Array(12).fill(cropTypes || 1)}
-          sparkColor={BRIGHT.orange}
+          note="commodities"
           loading={loading}
         />
-        <RegistryKpi
-          icon={<Ruler className="h-8 w-8" strokeWidth={2.4} />}
+        <RegistryStat
+          icon={<Ruler className="h-7 w-7" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.violet}
           iconColor={BRIGHT.violet}
           tint="violet"
-          value={avgPlotSize.toFixed(1)}
+          value={avgPlotSize.toFixed(2)}
           unit="ha"
-          label="Average Plot Size"
+          label="Avg. Plot Size"
           delta={plotTrend.delta}
-          spark={plotTrend.spark}
-          sparkColor={BRIGHT.violet}
+          loading={loading}
+        />
+        <RegistryStat
+          icon={<Sprout className="h-7 w-7" strokeWidth={2.5} />}
+          iconBg={BRIGHT_SOFT.teal}
+          iconColor={BRIGHT.teal}
+          tint="teal"
+          value={`${ownedShare.toFixed(1)}%`}
+          label="Land Owned"
+          note={`${formatCompact(ownedArea)} ha`}
+          loading={loading}
+        />
+        <RegistryStat
+          icon={<MapPinned className="h-7 w-7" strokeWidth={2.5} />}
+          iconBg={BRIGHT_SOFT.amber}
+          iconColor={BRIGHT.amber}
+          tint="amber"
+          value={formatFull(woredasReporting)}
+          label="Woredas Reporting"
+          note="with sown land"
           loading={loading}
         />
       </section>
 
-      <section className="grid grid-cols-1 items-start gap-3 @[900px]:grid-cols-[minmax(0,1fr)_336px]">
+      {/* Band 2 — map, crop mix, tenure */}
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.6fr_1.75fr_1.55fr]">
         <RegistryCard
+          dense
           title="Hectares Sown by Region"
           subtitle={
             loading
               ? "Loading coverage…"
               : `${formatFull(woredasReporting)} woreda${woredasReporting === 1 ? "" : "s"} reporting · click to drill down`
           }
-          className="overflow-hidden"
+          className="flex min-h-[260px] flex-col overflow-hidden @[860px]:min-h-0"
+          bodyClassName="relative min-h-0 flex-1"
         >
           <MapWhenVisible
-            minHeight="380px"
+            fill
+            legendPosition="overlay"
+            className="absolute inset-0 flex flex-col"
+            minHeight="100%"
             variant="registry"
             valueLabel="hectares"
             valueFormatter={(value: number) => formatCompact(value)}
@@ -246,53 +273,77 @@ export function CropSownDashboard({
           />
         </RegistryCard>
 
-        <div className="grid gap-3">
-          <RegistryCard title="Area Sown by Crop">
-            <BarList items={areaByCrop} unitLabel="Hectares" />
-          </RegistryCard>
+        <RegistryCard
+          dense
+          title="Area Sown by Crop"
+          subtitle="Leading commodities by hectares"
+          className="flex min-h-[220px] flex-col overflow-hidden @[860px]:min-h-0"
+          bodyClassName="flex min-h-0 flex-1 flex-col"
+        >
+          <BarList dense items={areaByCrop} unitLabel="Hectares" />
+        </RegistryCard>
 
-          <RegistryCard title="Land Tenure of Sown Plots">
-            <RegistryDonut
-              segments={tenureSegments}
-              centerValue={formatCompact(tenureParcels)}
-              centerLabel="Parcels"
-              totalLabel="Total"
-              totalValue={`${formatFull(tenureParcels)} parcels`}
-            />
-          </RegistryCard>
-
-          <RegistryCard title="Top Producing Woredas">
-            <RankList items={topWoredas} nameHeader="Woreda" valueHeader="Hectares" />
-          </RegistryCard>
-        </div>
+        <RegistryCard
+          dense
+          title="Land Tenure of Sown Plots"
+          subtitle="Parcels by ownership type"
+          className="flex min-h-[220px] flex-col overflow-hidden @[860px]:min-h-0"
+          bodyClassName="flex min-h-0 flex-1 items-center"
+        >
+          <RegistryDonut
+            ringSize={96}
+            className="w-full"
+            segments={tenureSegments}
+            centerValue={formatCompact(tenureParcels)}
+            centerLabel="Parcels"
+            totalLabel="Total"
+            totalValue={`${formatFull(tenureParcels)} parcels`}
+          />
+        </RegistryCard>
       </section>
 
-      <RegistryCard
-        title="Registered vs Owned Area by Month"
-        subtitle={
-          recentMonths.length
-            ? `${monthLabel(recentMonths[0].period)} – ${monthLabel(recentMonths[recentMonths.length - 1].period)}`
-            : undefined
-        }
-      >
-        {timeChartData.length === 0 ? (
-          <EmptyPanel message="No registrations in range" className="px-4 pb-5" />
-        ) : (
-          <div className="px-2 pb-3 pt-2">
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={timeChartData} margin={{ top: 16, right: 16, left: 4, bottom: 4 }} barGap={4}>
+      {/* Band 3 — top woredas, monthly area */}
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[860px]:grid-cols-[2fr_3.9fr]">
+        <RegistryCard
+          dense
+          title="Top Producing Woredas"
+          className="flex min-h-[200px] flex-col overflow-hidden @[860px]:min-h-0"
+          bodyClassName="flex min-h-0 flex-1 flex-col"
+        >
+          <RankList dense items={topWoredas} nameHeader="Woreda" valueHeader="Hectares" />
+        </RegistryCard>
+
+        <RegistryCard
+          dense
+          title="Registered vs Owned Area by Month"
+          subtitle={
+            recentMonths.length
+              ? `${monthLabel(recentMonths[0].period)} – ${monthLabel(recentMonths[recentMonths.length - 1].period)}`
+              : undefined
+          }
+          actions={areaTrend.delta ? <DeltaChip delta={areaTrend.delta} /> : undefined}
+          className="flex min-h-[220px] flex-col overflow-hidden @[860px]:min-h-0"
+          bodyClassName="min-h-0 flex-1 px-1 pb-1 pt-1"
+        >
+          {timeChartData.length === 0 ? (
+            <EmptyPanel message="No registrations in range" className="px-3 pb-3" />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={timeChartData} margin={{ top: 4, right: 10, left: 0, bottom: 0 }} barGap={3}>
                 <CartesianGrid vertical={false} stroke={REGISTRY_COLORS.line2} />
                 <XAxis
                   dataKey="period"
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fontSize: 10, fill: REGISTRY_COLORS.muted }}
+                  interval="preserveStartEnd"
+                  minTickGap={20}
+                  tick={{ fontSize: 9.5, fill: REGISTRY_COLORS.muted }}
                 />
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  width={48}
-                  tick={{ fontSize: 10, fill: REGISTRY_COLORS.muted }}
+                  width={34}
+                  tick={{ fontSize: 9.5, fill: REGISTRY_COLORS.muted }}
                   tickFormatter={(value: number) => formatCompact(value)}
                 />
                 <Tooltip
@@ -300,30 +351,42 @@ export function CropSownDashboard({
                   contentStyle={{
                     borderRadius: 10,
                     border: `1px solid ${REGISTRY_COLORS.line}`,
-                    fontSize: 12,
+                    fontSize: 11,
                   }}
                   formatter={(value: any, name: any) => [`${formatFull(toNumber(value))} ha`, String(name)]}
                 />
                 <Legend
                   align="right"
                   verticalAlign="top"
-                  height={26}
+                  height={18}
                   iconType="circle"
-                  iconSize={8}
-                  wrapperStyle={{ fontSize: 11, color: REGISTRY_COLORS.ink2 }}
+                  iconSize={7}
+                  wrapperStyle={{ fontSize: 10, color: REGISTRY_COLORS.ink2 }}
                 />
                 <Bar dataKey="registered" name="Registered Area (ha)" fill={BRIGHT.blue} radius={[2, 2, 0, 0]} />
                 <Bar dataKey="owned" name="Owned Area (ha)" fill={BRIGHT.amber} radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        )}
-      </RegistryCard>
+          )}
+        </RegistryCard>
+      </section>
 
-      <p className="pb-2 text-center text-[10.5px]" style={{ color: REGISTRY_COLORS.muted }}>
-        Boundaries: geoBoundaries gbOpen ETH ADM1/ADM3 (CC BY 4.0). Figures reflect registered farmer profiles for the
-        selected filters.
-      </p>
+      {/* Source ribbon */}
+      <div
+        className="flex flex-none items-center gap-2 rounded-xl border bg-white px-4 py-1 text-[10.5px]"
+        style={{ borderColor: REGISTRY_COLORS.line, color: REGISTRY_COLORS.muted }}
+      >
+        <Sprout className="h-3.5 w-3.5 flex-none" style={{ color: BRIGHT.green }} />
+        <span className="min-w-0 flex-1 truncate">
+          Boundaries: geoBoundaries gbOpen ETH ADM1/ADM3 (CC BY 4.0). Figures reflect registered farmer profiles for the
+          selected filters.
+        </span>
+        <ExportDataButton
+          filters={filters}
+          filePrefix="crop-sown-registry"
+          captureTargetId="tab-content-crop-registry"
+        />
+      </div>
     </div>
   )
 }

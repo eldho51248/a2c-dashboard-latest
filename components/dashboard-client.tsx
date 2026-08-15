@@ -144,7 +144,7 @@ export default function DashboardClient({
 
       // Hide KPI elements if present to capture only charts
       const hidden: Array<{ el: HTMLElement; prev: string }> = []
-      target.querySelectorAll<HTMLElement>('[data-kpi="true"]').forEach(el => {
+      target.querySelectorAll<HTMLElement>('[data-kpi="true"], [data-export-control="true"]').forEach(el => {
         hidden.push({ el, prev: el.style.display })
         el.style.display = 'none'
       })
@@ -358,14 +358,12 @@ export default function DashboardClient({
 
         {/* Main Content */}
         <div
-          className={`@container flex-1 min-h-0 bg-[#F5F8F6] p-3 md:p-4 ${
-            // Prefer a no-scroll overview on typical laptop heights; fall back
-            // to scrolling on shorter viewports so panels are never clipped.
-            registryView ? 'overflow-y-auto' : 'overflow-y-auto xl:overflow-hidden'
-          }`}
+          // Prefer a no-scroll screen on typical laptop heights; fall back to
+          // scrolling on shorter viewports so panels are never clipped.
+          className="@container flex-1 min-h-0 bg-[#F5F8F6] p-3 md:p-4 overflow-y-auto xl:overflow-hidden"
         >
           {registryView === 'crop' ? (
-            <div id="tab-content-crop-registry">
+            <div id="tab-content-crop-registry" className="h-full min-h-0">
               <CropSownDashboard
                 filters={filters}
                 geoJsonData={geoJsonData}
@@ -373,7 +371,7 @@ export default function DashboardClient({
               />
             </div>
           ) : registryView === 'livestock' ? (
-            <div id="tab-content-livestock-registry">
+            <div id="tab-content-livestock-registry" className="h-full min-h-0">
               <LivestockDashboard
                 filters={filters}
                 geoJsonData={geoJsonData}
