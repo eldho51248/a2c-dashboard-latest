@@ -91,57 +91,97 @@ interface GeoJSONData {
   features: GeoJSONFeature[];
 }
 
-// Calculate centroid of a feature for label placement
+// Calculate the label anchor point for a feature: the area-weighted centroid
+// (shoelace formula) of its largest ring, rather than a plain vertex average.
+// A vertex average drifts toward wherever a shape's outline has the most
+// points and can land outside thin/concave regions or in the gap between a
+// multi-polygon's disconnected parts; the area centroid of the largest part
+// sits reliably inside the region's main body instead.
+// Even-odd ray-casting point-in-polygon test, used to keep a label's jittered
+// position from drifting outside the region it's labelling.
+const pointInPolygon = (point: { x: number; y: number }, ring: [number, number][]): boolean => {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    const intersects =
+      yi > point.y !== yj > point.y &&
+      point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi;
+    if (intersects) inside = !inside;
+  }
+  return inside;
+};
+
 const calculateCentroid = (
   coordinates: any[],
   viewBox: { minX: number; minY: number; width: number; height: number }
-): { x: number; y: number } | null => {
+): { x: number; y: number; ring: [number, number][]; area: number } | null => {
   try {
-    let totalX = 0;
-    let totalY = 0;
-    let pointCount = 0;
+    const project = (coord: [number, number]): [number, number] => {
+      const [lng, lat] = coord;
+      const x = ((lng - viewBox.minX) / viewBox.width) * 800;
+      const y = ((viewBox.minY + viewBox.height - lat) / viewBox.height) * 600;
+      return [x, y];
+    };
 
-    const processRing = (ring: [number, number][]) => {
-      if (!ring || ring.length === 0) return;
-      ring.forEach((coord) => {
-        if (coord && coord.length === 2 && typeof coord[0] === 'number' && typeof coord[1] === 'number') {
-          const [lng, lat] = coord;
-          const x = ((lng - viewBox.minX) / viewBox.width) * 800;
-          const y = ((viewBox.minY + viewBox.height - lat) / viewBox.height) * 600;
-          totalX += x;
-          totalY += y;
-          pointCount++;
-        }
-      });
+    const ringCentroid = (
+      ring: [number, number][]
+    ): { x: number; y: number; area: number; pts: [number, number][] } | null => {
+      if (!ring || ring.length < 3) return null;
+      const pts = ring
+        .filter((c) => c && c.length === 2 && typeof c[0] === 'number' && typeof c[1] === 'number')
+        .map(project);
+      if (pts.length < 3) return null;
+
+      let signedArea = 0;
+      let cx = 0;
+      let cy = 0;
+      for (let i = 0; i < pts.length; i++) {
+        const [x0, y0] = pts[i];
+        const [x1, y1] = pts[(i + 1) % pts.length];
+        const cross = x0 * y1 - x1 * y0;
+        signedArea += cross;
+        cx += (x0 + x1) * cross;
+        cy += (y0 + y1) * cross;
+      }
+      signedArea *= 0.5;
+
+      if (Math.abs(signedArea) < 1e-6) {
+        const avg = pts.reduce((acc, [x, y]) => ({ x: acc.x + x, y: acc.y + y }), { x: 0, y: 0 });
+        return { x: avg.x / pts.length, y: avg.y / pts.length, area: 0, pts };
+      }
+
+      return { x: cx / (6 * signedArea), y: cy / (6 * signedArea), area: Math.abs(signedArea), pts };
     };
 
     if (!coordinates || !Array.isArray(coordinates)) return null;
 
+    const outerRings: [number, number][][] = [];
+
     // Handle MultiPolygon
     if (Array.isArray(coordinates[0]) && Array.isArray(coordinates[0][0]) && Array.isArray(coordinates[0][0][0])) {
       coordinates.forEach((polygon: any) => {
-        if (Array.isArray(polygon) && polygon.length > 0) {
-          const outerRing = polygon[0];
-          if (Array.isArray(outerRing)) {
-            processRing(outerRing);
-          }
+        if (Array.isArray(polygon) && polygon.length > 0 && Array.isArray(polygon[0])) {
+          outerRings.push(polygon[0]);
         }
       });
     }
     // Handle Polygon
     else if (Array.isArray(coordinates[0]) && Array.isArray(coordinates[0][0])) {
-      const outerRing = coordinates[0];
-      if (Array.isArray(outerRing)) {
-        processRing(outerRing);
-      }
+      outerRings.push(coordinates[0]);
     }
 
-    if (pointCount === 0) return null;
+    let best: { x: number; y: number; area: number; pts: [number, number][] } | null = null;
+    outerRings.forEach((ring) => {
+      const result = ringCentroid(ring);
+      if (result && (!best || result.area > best.area)) {
+        best = result;
+      }
+    });
 
-    return {
-      x: totalX / pointCount,
-      y: totalY / pointCount
-    };
+    if (!best) return null;
+    const resolved = best as { x: number; y: number; area: number; pts: [number, number][] };
+    return { x: resolved.x, y: resolved.y, ring: resolved.pts, area: resolved.area };
   } catch (error) {
     console.warn('Error calculating centroid:', error);
     return null;
@@ -309,7 +349,7 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
   );
   // Cache expensive geometry/path calculations across renders to keep the map snappy
   // Cache only geometry-derived data (paths/centroids); counts are re-read to reflect latest data
-  const pathCacheRef = useRef<Map<string, { pathData: string; centroid: { x: number; y: number } | null }>>(new Map())
+  const pathCacheRef = useRef<Map<string, { pathData: string; centroid: { x: number; y: number; ring: [number, number][]; area: number } | null }>>(new Map())
   const [mounted, setMounted] = useState(false);
   const [regionsData, setRegionsData] = useState<GeoJSONData | null>(null);
   const [zonesData, setZonesData] = useState<GeoJSONData | null>(null);
@@ -326,7 +366,7 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
   const [mapLevel, setMapLevel] = useState<MapLevel>({ type: 'regions' });
   const [childData, setChildData] = useState<any[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [showStaticLabels, setShowStaticLabels] = useState(false);
+  const [showStaticLabels, setShowStaticLabels] = useState(true);
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
 
   // Build a code -> count map with variants to match topo codes
@@ -674,7 +714,7 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
       featureId: string;
       featureName: string;
       pathData: string;
-      centroid: { x: number; y: number } | null;
+      centroid: { x: number; y: number; ring: [number, number][]; area: number } | null;
       farmerCount: number;
     }>;
   }, [currentFeatures, getFarmerCount, mapLevel.type, viewBox]);
@@ -682,10 +722,17 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
   // When static labels are enabled, jitter overlapping labels vertically
   const staticLabels = useMemo(() => {
     if (!showStaticLabels) return [];
-    const labelWidth = 120;
-    const labelHeight = 45;
-    const minGap = 6;
+    const labelWidth = 92;
+    const labelHeight = 26;
+    const minGap = 8;
     const bounds = { w: 800, h: 600 };
+
+    // Regions with a footprint too small to plausibly hold a label without
+    // spilling into their neighbours are skipped in the always-on view; they
+    // remain fully available via hover, so no data is hidden, just decluttered.
+    const areas = featureShapes.map(f => f.centroid?.area ?? 0).filter(a => a > 0);
+    const maxArea = areas.length ? Math.max(...areas) : 0;
+    const minLabelArea = Math.max(labelWidth * labelHeight * 0.55, maxArea * 0.05);
 
     const positions = [
       { dx: 0, dy: -labelHeight / 1.2 }, // above
@@ -697,13 +744,14 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
     ];
 
     const candidates = featureShapes
-      .filter(f => f.farmerCount > 0 && f.centroid)
+      .filter(f => f.farmerCount > 0 && f.centroid && f.centroid.area >= minLabelArea)
       .map(f => ({
         id: f.featureId,
         name: f.featureName,
         count: f.farmerCount,
         x: f.centroid!.x,
         y: f.centroid!.y,
+        ring: f.centroid!.ring,
       }))
       // sort by count desc so larger counts place first
       .sort((a, b) => b.count - a.count);
@@ -717,22 +765,22 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
     };
 
     candidates.forEach(label => {
-      for (let i = 0; i < positions.length; i++) {
-        const { dx, dy } = positions[i];
-        const x = Math.max(labelWidth / 2, Math.min(bounds.w - labelWidth / 2, label.x + dx));
-        const y = Math.max(labelHeight / 2, Math.min(bounds.h - labelHeight / 2, label.y + dy));
-        const candidate = { ...label, x, y };
-        if (!placed.some(p => overlaps(candidate, p))) {
-          placed.push(candidate);
-          return;
-        }
-      }
-      // If all preferred spots overlap, place at centroid clamped
-      placed.push({
-        ...label,
-        x: Math.max(labelWidth / 2, Math.min(bounds.w - labelWidth / 2, label.x)),
-        y: Math.max(labelHeight / 2, Math.min(bounds.h - labelHeight / 2, label.y)),
-      });
+      const spots = positions.map(({ dx, dy }) => ({
+        x: Math.max(labelWidth / 2, Math.min(bounds.w - labelWidth / 2, label.x + dx)),
+        y: Math.max(labelHeight / 2, Math.min(bounds.h - labelHeight / 2, label.y + dy)),
+      }));
+
+      // Best case: inside the region's own outline and clear of other labels.
+      // If that's not available, avoiding an unreadable overlap matters more
+      // than staying strictly inside a tiny region, so a clear-but-slightly-
+      // outside spot wins over an inside-but-overlapping one.
+      const isClear = (spot: { x: number; y: number }) => !placed.some((p) => overlaps(spot, p));
+      const insideAndClear = spots.find((spot) => pointInPolygon(spot, label.ring) && isClear(spot));
+      const clearOnly = insideAndClear ?? spots.find(isClear);
+      const insideOnly = clearOnly ?? spots.find((spot) => pointInPolygon(spot, label.ring));
+      const chosen = insideOnly ?? { x: label.x, y: label.y };
+
+      placed.push({ id: label.id, name: label.name, count: label.count, x: chosen.x, y: chosen.y });
     });
 
     return placed;
@@ -742,6 +790,14 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
     if (!featureShapes.length) return 0;
     return Math.max(...featureShapes.map(f => f.farmerCount));
   }, [featureShapes]);
+
+  const totalFeatureCount = useMemo(() => {
+    return featureShapes.reduce((sum, f) => sum + f.farmerCount, 0);
+  }, [featureShapes]);
+
+  const formatPercentOfTotal = useCallback((count: number) => {
+    return totalFeatureCount > 0 ? `${((count / totalFeatureCount) * 100).toFixed(1)}%` : '0.0%';
+  }, [totalFeatureCount]);
 
   // Breakpoints split the non-zero range into four quartile-ish bands so sparse
   // woredas stay visible instead of washing out against the top value.
@@ -826,8 +882,14 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
   };
 
   const toolButtonClass = isRegistry
-    ? 'flex items-center justify-center w-[29px] h-[29px] rounded-lg border-[#E6EAE8] bg-white text-[#4B5563] shadow-sm hover:bg-[#F7FAF8]'
+    ? 'flex items-center justify-center w-[29px] h-[29px] rounded-lg border-[#E6EAE8] bg-white text-[#000000] shadow-sm hover:bg-[#F7FAF8]'
     : 'flex items-center justify-center w-8 h-8 bg-background/80 backdrop-blur-sm'
+
+  // Expand is the primary map action, so it gets a filled brand-teal treatment
+  // instead of blending into the neutral outline buttons beside it.
+  const expandButtonClass = isRegistry
+    ? 'flex items-center justify-center w-[29px] h-[29px] rounded-lg border-transparent bg-[#076E7D] text-white shadow-sm hover:bg-[#0A8496]'
+    : 'flex items-center justify-center w-8 h-8 rounded-md border-transparent bg-[#076E7D] text-white shadow-sm backdrop-blur-sm hover:bg-[#0A8496]'
 
   // Callers that own a card title pass it through; the rest fall back to the
   // metric and the level currently on screen.
@@ -880,7 +942,35 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
         }
         style={isRegistry ? undefined : { height }}
       >
-        <div className={isRegistry ? 'absolute top-3 right-3 z-10 flex gap-1.5' : 'absolute top-0 right-0 z-10 flex gap-2 p-2'}>
+        <div className={isRegistry ? 'absolute top-3 right-3 z-10 flex items-center gap-2.5' : 'absolute top-0 right-0 z-10 flex items-center gap-3 p-2'}>
+          {/* Pop-out. The modal renders a second copy of the map driven by the
+              same filters and change handler, so drilling in either stays in
+              step; allowPopOut stops that copy offering the control again. */}
+          {allowPopOut && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={expandButtonClass}
+                  title="Open map in a larger view"
+                >
+                  <Maximize2 className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="flex h-[92vh] w-[96vw] max-w-[96vw] flex-col gap-3 p-4 sm:max-w-[96vw]">
+                <DialogHeader className="flex-none pr-8">
+                  <DialogTitle>{popOutHeading}</DialogTitle>
+                </DialogHeader>
+                <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg">
+                  <div className="absolute inset-0 flex flex-col">
+                    <EthiopiaMap {...props} allowPopOut={false} fill height="80vh" />
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
+          <div className={isRegistry ? 'flex gap-1.5' : 'flex gap-2'}>
           {/* List View Button */}
           <Dialog>
             <DialogTrigger asChild>
@@ -953,10 +1043,10 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
                   return (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-2 rounded text-sm hover:bg-muted cursor-default"
+                      className="flex items-center justify-between p-2 rounded text-[17px] hover:bg-muted cursor-default"
                     >
                       <span className="truncate mr-2" title={name}>{name}</span>
-                      <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
+                      <span className="font-mono text-[15px] bg-muted px-1.5 py-0.5 rounded">
                         {formatCompactNumber(count)}
                       </span>
                     </div>
@@ -1002,46 +1092,19 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
           >
             <Eye className="h-4 w-4" />
           </Button>
-
-          {/* Pop-out. The modal renders a second copy of the map driven by the
-              same filters and change handler, so drilling in either stays in
-              step; allowPopOut stops that copy offering the control again. */}
-          {allowPopOut && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className={toolButtonClass}
-                  title="Open map in a larger view"
-                >
-                  <Maximize2 className="h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="flex h-[92vh] w-[96vw] max-w-[96vw] flex-col gap-3 p-4 sm:max-w-[96vw]">
-                <DialogHeader className="flex-none pr-8">
-                  <DialogTitle>{popOutHeading}</DialogTitle>
-                </DialogHeader>
-                <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg">
-                  <div className="absolute inset-0 flex flex-col">
-                    <EthiopiaMap {...props} allowPopOut={false} fill height="80vh" />
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          )}
+          </div>
         </div>
         
         {legendPosition === 'overlay' && (
           <div
             className="absolute right-3 top-12 z-10 max-w-[48%] rounded-lg border border-[#E6EAE8] bg-white/95 px-2 py-1.5 shadow-sm backdrop-blur-sm"
           >
-            <div className="mb-1 text-[9px] font-semibold uppercase tracking-wide text-[#6B7280]">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-[#000000]">
               {valueLabel} per {mapLevel.type.replace(/s$/, '')}
             </div>
             <div className="grid gap-[3px]">
               {legendColors.map((color, index) => (
-                <span key={`${color}-${index}`} className="flex items-center gap-1.5 text-[9.5px] text-[#4B5563]">
+                <span key={`${color}-${index}`} className="flex items-center gap-1.5 text-[10.5px] font-medium text-[#000000]">
                   <span
                     className="h-2 w-2 flex-none rounded-[2px] border border-black/5"
                     style={{ background: color }}
@@ -1092,14 +1155,13 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
               <g key={`label-${label.id}`} className="pointer-events-none">
                 <text
                   x={label.x}
-                  y={label.y - 10}
+                  y={label.y - 8}
                   textAnchor="middle"
-                  className="text-xs font-semibold"
-                  fill="#111827"
-                  stroke="#FFFFFF"
+                  stroke="rgba(0,0,0,0.65)"
                   strokeWidth={3}
                   strokeLinejoin="round"
                   paintOrder="stroke"
+                  className="fill-white text-[11px] font-bold"
                 >
                   {label.name}
                 </text>
@@ -1107,50 +1169,47 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
                   x={label.x}
                   y={label.y + 8}
                   textAnchor="middle"
-                  className="text-[11px] font-medium"
-                  fill="#374151"
-                  stroke="#FFFFFF"
+                  stroke="rgba(0,0,0,0.65)"
                   strokeWidth={3}
                   strokeLinejoin="round"
                   paintOrder="stroke"
+                  className="fill-white text-[10.5px] font-bold"
                 >
-                  {formatValue(label.count)} {valueLabel}
+                  {formatValue(label.count)} ({formatPercentOfTotal(label.count)})
                 </text>
               </g>
             ))}
 
-            {/* Tooltip rendered last to be on top */}
-            {hoveredFeatureData && (
+            {/* Tooltip rendered last to be on top. Skipped when a static label is
+                already showing for this feature, so the two don't overlap. */}
+            {hoveredFeatureData && !(showStaticLabels && hoveredFeatureData.count > 0) && (
               <g className="pointer-events-none" style={{ zIndex: 9999 }}>
                 {(() => {
-                  const textWidth = Math.max(120, hoveredFeatureData.name.length * 8);
-                  const rectWidth = textWidth + 20;
-                  
                   return (
                     <>
-                      <rect
-                        x={hoveredFeatureData.centroid.x - rectWidth / 2}
-                        y={hoveredFeatureData.centroid.y - 35}
-                        width={rectWidth}
-                        height="50"
-                        rx="4"
-                        className="fill-black/80"
-                      />
                       <text
                         x={hoveredFeatureData.centroid.x}
-                        y={hoveredFeatureData.centroid.y - 15}
+                        y={hoveredFeatureData.centroid.y - 9}
                         textAnchor="middle"
-                        className="fill-white text-sm font-semibold"
+                        stroke="rgba(0,0,0,0.65)"
+                        strokeWidth={3.5}
+                        strokeLinejoin="round"
+                        paintOrder="stroke"
+                        className="fill-white text-[13px] font-bold"
                       >
                         {hoveredFeatureData.name}
                       </text>
                       <text
                         x={hoveredFeatureData.centroid.x}
-                        y={hoveredFeatureData.centroid.y + 5}
+                        y={hoveredFeatureData.centroid.y + 9}
                         textAnchor="middle"
-                        className="fill-yellow-300 text-xs"
+                        stroke="rgba(0,0,0,0.65)"
+                        strokeWidth={3.5}
+                        strokeLinejoin="round"
+                        paintOrder="stroke"
+                        className="fill-white text-[12px] font-bold"
                       >
-                        {formatValue(hoveredFeatureData.count)} {valueLabel}
+                        {formatValue(hoveredFeatureData.count)} ({formatPercentOfTotal(hoveredFeatureData.count)})
                       </text>
                     </>
                   );
@@ -1171,7 +1230,7 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
 
       {legendPosition === 'below' && (
         <div className={fill ? 'flex-none px-3 pb-2 pt-1' : 'px-4 pb-3.5 pt-1'}>
-          <div className="mb-1.5 text-[10.5px] text-[#6B7280]">
+          <div className="mb-1.5 text-[11px] font-medium text-[#000000]">
             {valueLabel.charAt(0).toUpperCase() + valueLabel.slice(1)} per {mapLevel.type.replace(/s$/, '')}
           </div>
           <div className="grid h-[9px] grid-cols-5 overflow-hidden rounded-[3px]">
@@ -1179,7 +1238,7 @@ export function EthiopiaMap(props: EthiopiaMapProps) {
               <span key={`${color}-${index}`} style={{ background: color }} />
             ))}
           </div>
-          <div className="mt-1 grid grid-cols-5 text-[10px] text-[#6B7280]">
+          <div className="mt-1 grid grid-cols-5 text-[10.5px] font-medium text-[#000000]">
             {rampLabels.map((label, index) => (
               <span key={`${label}-${index}`} className="text-center">{label}</span>
             ))}

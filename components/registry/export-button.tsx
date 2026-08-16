@@ -114,11 +114,14 @@ export function ExportDataButton({
   csvSections,
   filePrefix,
   captureTargetId,
+  tone = "default",
 }: {
   filters?: RegistryFilters
   csvSections?: () => CsvSection[]
   filePrefix: string
   captureTargetId: string
+  /** "red" renders a solid red accent button, for placement in the header. */
+  tone?: "default" | "red"
 }) {
   const [state, setState] = useState<ExportState>("idle")
   const [activeFormat, setActiveFormat] = useState<ExportFormat | null>(null)
@@ -215,11 +218,19 @@ export function ExportDataButton({
         disabled={state === "busy"}
         aria-label="Export this dashboard"
         title="Export this dashboard as image, PDF or CSV"
-        className="inline-flex flex-none items-center gap-1 rounded-md border bg-white px-2 py-[3px] text-[10px] font-semibold outline-none transition-colors hover:bg-[#F2F8F4] disabled:cursor-progress"
-        style={{
-          borderColor: isError ? REGISTRY_COLORS.red : REGISTRY_COLORS.line,
-          color: isError ? REGISTRY_COLORS.red : REGISTRY_COLORS.g700,
-        }}
+        className={
+          tone === "red"
+            ? "inline-flex flex-none items-center gap-1.5 rounded-md border px-3 py-1.5 text-[12px] font-semibold text-white outline-none transition-colors hover:bg-[#B91C1C] disabled:cursor-progress"
+            : "inline-flex flex-none items-center gap-1 rounded-md border bg-white px-2 py-[3px] text-[10px] font-semibold outline-none transition-colors hover:bg-[#F2F8F4] disabled:cursor-progress"
+        }
+        style={
+          tone === "red"
+            ? { borderColor: "#DC2626", background: "#DC2626", color: "#FFFFFF" }
+            : {
+                borderColor: isError ? REGISTRY_COLORS.red : REGISTRY_COLORS.line,
+                color: isError ? REGISTRY_COLORS.red : REGISTRY_COLORS.g700,
+              }
+        }
       >
         <TriggerIcon className={`h-3 w-3 ${state === "busy" ? "animate-spin" : ""}`} />
         {label}

@@ -80,7 +80,7 @@ export function TradeAnalysisCharts() {
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading trade analysis data...</p>
+            <p className="text-black">Loading trade analysis data...</p>
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@ export function TradeAnalysisCharts() {
           <div className="text-center">
             <div className="text-red-500 text-6xl mb-4">⚠️</div>
             <p className="text-red-600 font-semibold">Error loading data</p>
-            <p className="text-gray-600 text-sm mt-2">{error}</p>
+            <p className="text-black text-sm mt-2">{error}</p>
           </div>
         </div>
       </div>
@@ -146,8 +146,8 @@ export function TradeAnalysisCharts() {
                 >
                   <AreaChart data={merchandiseImportsData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="year" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
+                    <XAxis dataKey="year" stroke="#000000" />
+                    <YAxis stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <ChartLegend content={<ChartLegendContent />} />
                     <Area
@@ -237,8 +237,8 @@ export function TradeAnalysisCharts() {
                 >
                   <LineChart data={highTechExportsData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="year" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
+                    <XAxis dataKey="year" stroke="#000000" />
+                    <YAxis stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Line
                       type="monotone"
@@ -275,8 +275,8 @@ export function TradeAnalysisCharts() {
                 >
                   <BarChart data={tariffRatesData} layout="horizontal">
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis type="number" stroke="#6B7280" />
-                    <YAxis dataKey="category" type="category" width={120} stroke="#6B7280" />
+                    <XAxis type="number" stroke="#000000" />
+                    <YAxis dataKey="category" type="category" width={120} stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="rate" fill="#7C3AED" radius={[0, 4, 4, 0]} />
                   </BarChart>

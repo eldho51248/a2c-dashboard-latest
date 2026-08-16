@@ -219,7 +219,7 @@ export function GovernanceCharts({
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading governance data...</p>
+            <p className="text-black">Loading governance data...</p>
           </div>
         </div>
       </div>
@@ -234,7 +234,7 @@ export function GovernanceCharts({
           <div className="text-center">
             <div className="text-red-500 text-6xl mb-4">⚠️</div>
             <p className="text-red-600 font-semibold">Error loading data</p>
-            <p className="text-gray-600 text-sm mt-2">{error}</p>
+            <p className="text-black text-sm mt-2">{error}</p>
           </div>
         </div>
       </div>
@@ -258,8 +258,8 @@ export function GovernanceCharts({
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={filteredFemaleFarmersData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="region" stroke="#1e3a8a" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="region" stroke="#000000" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Bar dataKey="female_farmers" fill="#ec4899" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="male_farmers" fill="#3b82f6" radius={[4, 4, 0, 0]} />
@@ -280,8 +280,8 @@ export function GovernanceCharts({
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={filteredFemaleHouseholdHeadsData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="region" stroke="#1e3a8a" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="region" stroke="#000000" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Bar dataKey="female_household_heads" fill="#10b981" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="male_household_heads" fill="#f59e0b" radius={[4, 4, 0, 0]} />
@@ -302,8 +302,8 @@ export function GovernanceCharts({
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={filteredGenderByFarmingTypeData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="farming_type" stroke="#1e3a8a" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="farming_type" stroke="#000000" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Bar dataKey="female_farmers" fill="#ec4899" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="male_farmers" fill="#3b82f6" radius={[4, 4, 0, 0]} />
@@ -324,8 +324,8 @@ export function GovernanceCharts({
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={filteredHomicideRateData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="year" stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="male" stackId="1" stroke="#2563eb" fill="#2563eb" fillOpacity={0.6} />
                 <Area type="monotone" dataKey="female" stackId="1" stroke="#ec4899" fill="#ec4899" fillOpacity={0.6} />
@@ -360,8 +360,8 @@ export function GovernanceCharts({
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={filteredGovernanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis domain={[0, 50]} stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="year" stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis domain={[0, 50]} stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Line
                   type="monotone"
@@ -434,8 +434,8 @@ export function GovernanceCharts({
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={filteredCorruptionData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="year" stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Bar dataKey="perception" fill="#1e3a8a" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="regional" fill="#059669" radius={[4, 4, 0, 0]} />

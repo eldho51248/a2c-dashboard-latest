@@ -110,7 +110,7 @@ export function InstitutionsIndicatorsCharts({
         {/* Governance Effectiveness by Region */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Governance Effectiveness by Region</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Governance Effectiveness by Region</h3>
             <ChartContainer
               config={{
                 effectiveness: { label: "Governance Effectiveness", color: "#059669" },
@@ -120,8 +120,8 @@ export function InstitutionsIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={governanceData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="region" stroke="#1e3a8a" angle={-45} textAnchor="end" height={80} />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="region" stroke="#000000" angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="effectiveness" fill="#059669" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -133,7 +133,7 @@ export function InstitutionsIndicatorsCharts({
         {/* Corruption Index Trends */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Corruption Index Trends (Lower is Better)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Corruption Index Trends (Lower is Better)</h3>
             <ChartContainer
               config={{
                 corruption: { label: "Corruption Index", color: "#dc2626" },
@@ -143,8 +143,8 @@ export function InstitutionsIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={corruptionData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="year" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Line
                     type="monotone"
@@ -162,7 +162,7 @@ export function InstitutionsIndicatorsCharts({
         {/* Rule of Law by Region */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Rule of Law by Region (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Rule of Law by Region (%)</h3>
             <ChartContainer
               config={{
                 rule_of_law: { label: "Rule of Law", color: "#8b5cf6" },
@@ -172,8 +172,8 @@ export function InstitutionsIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={ruleOfLawData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="region" stroke="#1e3a8a" angle={-45} textAnchor="end" height={80} />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="region" stroke="#000000" angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Area type="monotone" dataKey="rule_of_law" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.6} />
                 </AreaChart>
@@ -185,7 +185,7 @@ export function InstitutionsIndicatorsCharts({
         {/* Institutional Quality Radar */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Institutional Quality Overview</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Institutional Quality Overview</h3>
             <ChartContainer
               config={{
                 value: { label: "Score", color: "#f59e0b" },
