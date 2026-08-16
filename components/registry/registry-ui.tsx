@@ -580,14 +580,14 @@ export function ProgressRow({
   return (
     <div
       className="grid items-center gap-2.5"
-      style={{ gridTemplateColumns: `${icon ? "16px " : ""}auto minmax(0,1fr) auto` }}
+      style={{ gridTemplateColumns: `${icon ? "16px " : ""}minmax(0,1fr) ${barWidth} auto` }}
     >
       {icon && (
         <span className="grid h-4 w-4 place-items-center" style={{ color: iconColor || REGISTRY_COLORS.muted }}>
           {icon}
         </span>
       )}
-      <span className="max-w-[170px] truncate text-[17px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }} title={label}>
+      <span className="truncate text-[17px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }} title={label}>
         {label}
       </span>
       <span className="h-[9px] overflow-hidden rounded-full" style={{ background: "#F1F4F2" }}>

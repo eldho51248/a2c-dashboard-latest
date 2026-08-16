@@ -459,7 +459,7 @@ export default function DashboardClient({
         <div
           // Prefer a no-scroll screen on typical laptop heights; fall back to
           // scrolling on shorter viewports so panels are never clipped.
-          className="@container flex-1 min-h-0 bg-[#F5F8F6] p-3 md:p-4 overflow-y-auto xl:overflow-hidden"
+          className="@container flex-1 min-h-0 overflow-y-auto bg-[#F5F8F6] p-3 md:p-4"
         >
           {isCatalogs ? (
             <div id="dashboard-catalogs" className="h-full min-h-0">

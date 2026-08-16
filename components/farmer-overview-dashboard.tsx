@@ -265,11 +265,9 @@ export function FarmerOverviewDashboard({
   }
 
   return (
-    <div
-      className="flex h-full min-h-0 flex-col gap-3 @[860px]:grid @[860px]:grid-rows-[auto_minmax(0,215fr)_minmax(0,180fr)_minmax(0,92fr)_auto]"
-    >
+    <div className="flex min-h-full flex-col gap-3">
       {/* Band 1 — KPI ribbon (six tiles, content-weighted widths) */}
-      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[860px]:grid-cols-[1.4fr_1.26fr_1.4fr_1.18fr_1.18fr_1.38fr]">
+      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[1400px]:grid-cols-[1.4fr_1.26fr_1.4fr_1.18fr_1.18fr_1.38fr]">
         <RegistryStat
           icon={<Users className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.blue}
@@ -335,12 +333,12 @@ export function FarmerOverviewDashboard({
       </section>
 
       {/* Band 2 — map (lead panel), trend, snapshot, group insights */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.4fr_1.5fr_2.65fr_1.6fr]">
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[1400px]:min-h-[300px] @[1400px]:grid-cols-[2.4fr_1.5fr_2.65fr_1.6fr]">
         <RegistryCard
           dense
           title="Farmers by Region"
           subtitle="Click a region to drill down"
-          className="flex min-h-[260px] flex-col overflow-hidden @[860px]:min-h-0"
+          className="flex min-h-[260px] flex-col overflow-hidden @[1400px]:min-h-0"
           bodyClassName="relative min-h-0 flex-1"
         >
           <MapWhenVisible
@@ -369,7 +367,7 @@ export function FarmerOverviewDashboard({
           title="Registration Trend"
           subtitle="Farmers registered per month"
           actions={farmerTrend.delta ? <DeltaChip delta={farmerTrend.delta} /> : undefined}
-          className="flex min-h-[220px] flex-col @[860px]:min-h-0"
+          className="flex min-h-[220px] flex-col @[1400px]:min-h-0"
           bodyClassName="min-h-0 flex-1 px-1 pb-1 pt-1"
         >
           {trendData.length === 0 ? (
@@ -421,7 +419,7 @@ export function FarmerOverviewDashboard({
           dense
           title="Registry Snapshot"
           subtitle="Farmers by farming type"
-          className="flex min-h-[260px] flex-col @[860px]:min-h-0"
+          className="flex min-h-[260px] flex-col @[1400px]:min-h-0"
           bodyClassName="flex min-h-0 flex-1 items-start overflow-hidden"
         >
           <RegistryDonut
@@ -486,7 +484,7 @@ export function FarmerOverviewDashboard({
       </section>
 
       {/* Band 3 — farm profile, coverage, demography, land, alerts rail */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[1.78fr_2.01fr_1.41fr_1.23fr_1.7fr]">
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-3 @[1400px]:min-h-[290px] @[1400px]:grid-cols-[1.78fr_2.01fr_1.41fr_1.23fr_1.7fr]">
         <RegistryCard
           dense
           title="Farm Profile"
@@ -686,7 +684,7 @@ export function FarmerOverviewDashboard({
       </section>
 
       {/* Band 4 — education, key indicators */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[1fr_1fr]">
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:min-h-[210px] @[860px]:grid-cols-[1fr_1fr]">
         <RegistryCard
           dense
           title="Education Profile"
