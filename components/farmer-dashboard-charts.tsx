@@ -330,7 +330,7 @@ export function FarmerDashboardCharts({ filters, onMapFilterChange, geoJsonData,
 
               {loading ? (
                 <div className="h-[250px] flex items-center justify-center">
-                  <div className="text-gray-500">Loading...</div>
+                  <div className="text-black">Loading...</div>
                 </div>
               ) : errorMessage ? (
                 <div className="h-[250px] flex items-center justify-center bg-red-50 border border-red-200 rounded">
@@ -450,7 +450,7 @@ export function FarmerDashboardCharts({ filters, onMapFilterChange, geoJsonData,
             <h3 className="text-sm text-center text-muted-foreground mb-3">Age & Gender Distribution</h3>
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
-                <div className="text-gray-500">Loading...</div>
+                <div className="text-black">Loading...</div>
               </div>
             ) : (
               <ChartContainer

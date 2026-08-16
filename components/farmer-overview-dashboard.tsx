@@ -42,7 +42,6 @@ import {
   RegistryStat,
   SegmentRow,
   SplitBar,
-  StatusPill,
   formatCompact,
   formatFull,
 } from "@/components/registry/registry-ui"
@@ -53,7 +52,6 @@ import {
   toNumber,
   useRegistryTrend,
 } from "@/components/registry/registry-data"
-import { ExportDataButton } from "@/components/registry/export-button"
 
 const CHART_NAMES = [
   "farmerKpis",
@@ -67,7 +65,6 @@ const CHART_NAMES = [
   "farmersByRecordState",
   "landTenureSplit",
   "registryTrendByMonth",
-  "recentRegistrations",
   "registryCoverage",
 ]
 
@@ -214,8 +211,6 @@ export function FarmerOverviewDashboard({
   const woredasCovered = toNumber(coverage?.woredas_covered)
   const woredaCoverage = woredasTotal > 0 ? (woredasCovered / woredasTotal) * 100 : 0
 
-  const recentRegistrations = charts.recentRegistrations || []
-
   const psnpUsers = useMemo(
     () =>
       toNumber(
@@ -262,7 +257,7 @@ export function FarmerOverviewDashboard({
   if (error) {
     return (
       <RegistryCard title="Farmer Profile Overview">
-        <div className="px-4 pb-5 pt-3 text-[12px]" style={{ color: REGISTRY_COLORS.red }}>
+        <div className="px-4 pb-5 pt-3 text-[16.5px]" style={{ color: REGISTRY_COLORS.red }}>
           Failed to load dashboard data: {error}
         </div>
       </RegistryCard>
@@ -276,7 +271,7 @@ export function FarmerOverviewDashboard({
       {/* Band 1 — KPI ribbon (six tiles, content-weighted widths) */}
       <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[860px]:grid-cols-[1.4fr_1.26fr_1.4fr_1.18fr_1.18fr_1.38fr]">
         <RegistryStat
-          icon={<Users className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Users className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           tint="blue"
@@ -286,7 +281,7 @@ export function FarmerOverviewDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Home className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Home className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.green}
           iconColor={BRIGHT.green}
           tint="green"
@@ -296,7 +291,7 @@ export function FarmerOverviewDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Sprout className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Sprout className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.orange}
           iconColor={BRIGHT.orange}
           tint="peach"
@@ -307,7 +302,7 @@ export function FarmerOverviewDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<UserRound className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<UserRound className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.violet}
           iconColor={BRIGHT.violet}
           tint="violet"
@@ -317,7 +312,7 @@ export function FarmerOverviewDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<HandCoins className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<HandCoins className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.teal}
           iconColor={BRIGHT.teal}
           tint="teal"
@@ -327,7 +322,7 @@ export function FarmerOverviewDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Ruler className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Ruler className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.amber}
           iconColor={BRIGHT.amber}
           tint="amber"
@@ -340,23 +335,31 @@ export function FarmerOverviewDashboard({
       </section>
 
       {/* Band 2 — snapshot, trend, map, group insights */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.03fr_2.03fr_2.43fr_1.71fr]">
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.4fr_1.5fr_2.65fr_1.6fr]">
         <RegistryCard
           dense
-          title="Registry Snapshot"
-          subtitle="Farmers by farming type"
-          className="flex min-h-[220px] flex-col @[860px]:min-h-0"
-          bodyClassName="flex min-h-0 flex-1 items-center"
+          title="Farmers by Region"
+          subtitle="Click a region to drill down"
+          className="flex min-h-[260px] flex-col overflow-hidden @[860px]:min-h-0"
+          bodyClassName="relative min-h-0 flex-1"
         >
-          <RegistryDonut
-            subInline
-            ringSize={112}
-            className="w-full"
-            segments={typeSegments}
-            centerValue={formatCompact(totalFarmers)}
-            centerLabel="Farmers"
-            totalLabel="Total"
-            totalValue={formatFull(totalFarmers)}
+          <MapWhenVisible
+            fill
+            legendPosition="below"
+            className="absolute inset-0 flex flex-col"
+            minHeight="100%"
+            variant="registry"
+            valueLabel="farmers"
+            valueFormatter={(value: number) => formatCompact(value)}
+            currentFilters={{
+              region: filters.region !== "all" ? filters.region : undefined,
+              zone: filters.zone !== "all" ? filters.zone : undefined,
+              woreda: filters.woreda !== "all" ? filters.woreda : undefined,
+              kebele: filters.kebele !== "all" ? filters.kebele : undefined,
+            }}
+            onFilterChange={(mapFilters: any) => onMapFilterChange?.(mapFilters)}
+            farmerData={farmersByRegion}
+            geoJsonData={geoJsonData}
           />
         </RegistryCard>
 
@@ -415,28 +418,20 @@ export function FarmerOverviewDashboard({
 
         <RegistryCard
           dense
-          title="Farmers by Region"
-          subtitle="Click a region to drill down"
-          className="flex min-h-[260px] flex-col overflow-hidden @[860px]:min-h-0"
-          bodyClassName="relative min-h-0 flex-1"
+          title="Registry Snapshot"
+          subtitle="Farmers by farming type"
+          className="flex min-h-[260px] flex-col @[860px]:min-h-0"
+          bodyClassName="flex min-h-0 flex-1 items-center"
         >
-          <MapWhenVisible
-            fill
-            legendPosition="overlay"
-            className="absolute inset-0 flex flex-col"
-            minHeight="100%"
-            variant="registry"
-            valueLabel="farmers"
-            valueFormatter={(value: number) => formatCompact(value)}
-            currentFilters={{
-              region: filters.region !== "all" ? filters.region : undefined,
-              zone: filters.zone !== "all" ? filters.zone : undefined,
-              woreda: filters.woreda !== "all" ? filters.woreda : undefined,
-              kebele: filters.kebele !== "all" ? filters.kebele : undefined,
-            }}
-            onFilterChange={(mapFilters: any) => onMapFilterChange?.(mapFilters)}
-            farmerData={farmersByRegion}
-            geoJsonData={geoJsonData}
+          <RegistryDonut
+            subInline
+            ringSize={190}
+            className="w-full"
+            segments={typeSegments}
+            centerValue={formatCompact(totalFarmers)}
+            centerLabel="Farmers"
+            totalLabel="Total"
+            totalValue={formatFull(totalFarmers)}
           />
         </RegistryCard>
 
@@ -444,10 +439,10 @@ export function FarmerOverviewDashboard({
           dense
           title="Farmer Group Insights"
           className="flex min-h-0 flex-col"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[10px] px-3 pb-2.5 pt-2"
+          bodyClassName="grid min-h-0 flex-1 auto-rows-fr gap-3 px-3 pb-3 pt-2.5"
         >
           <SegmentRow
-            icon={<UserRound className="h-3.5 w-3.5" />}
+            icon={<UserRound className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.pink}
             iconColor={BRIGHT.pink}
             label="Female farmers"
@@ -455,7 +450,7 @@ export function FarmerOverviewDashboard({
             share={`(${share(femaleFarmers).toFixed(1)}%)`}
           />
           <SegmentRow
-            icon={<Home className="h-3.5 w-3.5" />}
+            icon={<Home className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.violet}
             iconColor={BRIGHT.violet}
             label="Household heads"
@@ -463,7 +458,7 @@ export function FarmerOverviewDashboard({
             share={`(${share(householdHeads).toFixed(1)}%)`}
           />
           <SegmentRow
-            icon={<Users className="h-3.5 w-3.5" />}
+            icon={<Users className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.blue}
             iconColor={BRIGHT.blue}
             label="Youth farmers (18–30)"
@@ -471,7 +466,7 @@ export function FarmerOverviewDashboard({
             share={`(${share(youthFarmers).toFixed(1)}%)`}
           />
           <SegmentRow
-            icon={<Leaf className="h-3.5 w-3.5" />}
+            icon={<Leaf className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.teal}
             iconColor={BRIGHT.teal}
             label="Farmers aged 70+"
@@ -479,7 +474,7 @@ export function FarmerOverviewDashboard({
             share={`(${share(elderlyFarmers).toFixed(1)}%)`}
           />
           <SegmentRow
-            icon={<HandCoins className="h-3.5 w-3.5" />}
+            icon={<HandCoins className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.amber}
             iconColor={BRIGHT.amber}
             label="PSNP participants"
@@ -497,12 +492,12 @@ export function FarmerOverviewDashboard({
           className="flex min-h-0 flex-col"
           bodyClassName="flex min-h-0 flex-1 flex-col gap-2 px-3 pb-2.5 pt-2"
         >
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-3 gap-2">
             <MiniStat value={avgFarmSize.toFixed(2)} unit="ha" label="Avg. farm size" />
             <MiniStat value={`${share(landOwners).toFixed(0)}%`} label="Land owners" />
             <MiniStat value={`${share(femaleFarmers).toFixed(0)}%`} label="Female" />
           </div>
-          <div className="grid flex-1 content-start gap-[9px]">
+          <div className="grid flex-1 auto-rows-fr gap-2">
             <ProgressRow
               icon={<Home className="h-3 w-3" />}
               label="Farmers heading a household"
@@ -547,7 +542,7 @@ export function FarmerOverviewDashboard({
             <>
               <RegistryDonut
                 subInline
-                ringSize={96}
+                ringSize={110}
                 className="flex-none gap-3 px-2 pb-1 pt-1"
                 segments={[
                   {
@@ -569,7 +564,7 @@ export function FarmerOverviewDashboard({
                 totalValue={formatFull(woredasTotal)}
               />
               <div className="flex min-h-[68px] flex-1 flex-col gap-1 px-2 pt-0.5">
-                <span className="text-[9.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+                <span className="text-[13.5px]" style={{ color: REGISTRY_COLORS.muted }}>
                   Share of farmers by leading region
                 </span>
                 <MiniColumnBars items={topRegionBars} color={BRIGHT.teal} />
@@ -598,7 +593,7 @@ export function FarmerOverviewDashboard({
           {ageRows.length === 0 ? (
             <EmptyPanel message="No age data" />
           ) : (
-            <div className="grid flex-1 content-start gap-[9px]">
+            <div className="grid flex-1 auto-rows-fr gap-2">
               {ageRows.map((row) => (
                 <ProgressRow
                   key={row.name}
@@ -625,18 +620,18 @@ export function FarmerOverviewDashboard({
             <>
               <div>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-[20px] font-bold leading-none" style={{ color: REGISTRY_COLORS.ink }}>
+                  <span className="text-[24px] font-bold leading-none" style={{ color: REGISTRY_COLORS.ink }}>
                     {formatCompact(tenureArea)}
                   </span>
-                  <span className="text-[11px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
+                  <span className="text-[15px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
                     ha
                   </span>
                 </div>
-                <div className="mt-0.5 text-[10px]" style={{ color: REGISTRY_COLORS.muted }}>
+                <div className="mt-0.5 text-[14px]" style={{ color: REGISTRY_COLORS.muted }}>
                   {formatFull(tenureParcels)} parcels registered
                 </div>
               </div>
-              <div className="grid flex-1 content-start gap-[9px]">
+              <div className="grid flex-1 auto-rows-fr gap-2">
                 {tenureSegments.map((segment: { name: string; value: number; area: number; color: string }) => (
                   <ProgressRow
                     key={segment.name}
@@ -656,31 +651,31 @@ export function FarmerOverviewDashboard({
           dense
           title="Alerts & Notifications"
           className="flex min-h-0 flex-col"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-2.5 px-3 pb-2.5 pt-2"
+          bodyClassName="grid min-h-0 flex-1 auto-rows-fr gap-3 px-3 pb-3 pt-2.5"
         >
           <AlertRow
-            icon={<Clock className="h-3.5 w-3.5" />}
+            icon={<Clock className="h-4 w-4" />}
             tone="warning"
             title="Records awaiting approval"
             detail={`${formatFull(recordStates.open)} profiles are pending, in review or still draft.`}
             context={`${share(recordStates.open).toFixed(1)}%`}
           />
           <AlertRow
-            icon={<AlertTriangle className="h-3.5 w-3.5" />}
+            icon={<AlertTriangle className="h-4 w-4" />}
             tone="danger"
             title="Rejected records"
             detail={`${formatFull(recordStates.rejected)} profiles need correction before approval.`}
             context={`${share(recordStates.rejected).toFixed(1)}%`}
           />
           <AlertRow
-            icon={<Fingerprint className="h-3.5 w-3.5" />}
+            icon={<Fingerprint className="h-4 w-4" />}
             tone="info"
             title="Missing national ID"
             detail={`${formatFull(Math.max(0, totalFarmers - farmersWithId))} profiles have no national ID linked.`}
             context={`${(100 - share(farmersWithId)).toFixed(1)}%`}
           />
           <AlertRow
-            icon={<TrendingUp className="h-3.5 w-3.5" />}
+            icon={<TrendingUp className="h-4 w-4" />}
             tone="info"
             title="Latest registrations"
             detail={`${formatFull(Math.round(latestMonth?.farmers || 0))} farmers registered in the most recent month.`}
@@ -689,13 +684,13 @@ export function FarmerOverviewDashboard({
         </RegistryCard>
       </section>
 
-      {/* Band 4 — education, latest records, key indicators */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.15fr_3.52fr_2.63fr]">
+      {/* Band 4 — education, key indicators */}
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[1fr_1fr]">
         <RegistryCard
           dense
           title="Education Profile"
           className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[4px] px-3 pb-1.5 pt-1"
+          bodyClassName="grid min-h-0 flex-1 auto-rows-fr gap-1.5 px-3 pb-2.5 pt-2"
         >
           {educationRows.length === 0 ? (
             <EmptyPanel message="No education data" />
@@ -715,85 +710,33 @@ export function FarmerOverviewDashboard({
 
         <RegistryCard
           dense
-          title="Recent Registrations"
-          subtitle="Latest records for the current filters"
-          className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="min-h-0 flex-1 overflow-hidden px-3 pb-2 pt-1"
-        >
-          {recentRegistrations.length === 0 ? (
-            <EmptyPanel message="No registrations for the current filters" />
-          ) : (
-            <div>
-              <div
-                className="grid grid-cols-[44px_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.9fr)_auto] gap-2 border-b pb-1 text-[9.5px]"
-                style={{ borderColor: REGISTRY_COLORS.line2, color: REGISTRY_COLORS.muted }}
-              >
-                <span>Date</span>
-                <span>Farmer ID</span>
-                <span>Region</span>
-                <span>Woreda</span>
-                <span>Type</span>
-                <span className="text-right">Status</span>
-              </div>
-              {recentRegistrations.map((row: any, index: number) => (
-                <div
-                  key={`${row.farmer_ref}-${index}`}
-                  className="grid grid-cols-[44px_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.9fr)_auto] items-center gap-2 py-[3px] text-[10.5px]"
-                  style={{ color: REGISTRY_COLORS.ink2 }}
-                >
-                  <span className="whitespace-nowrap" style={{ color: REGISTRY_COLORS.muted }}>
-                    {row.registered_on}
-                  </span>
-                  <span className="truncate font-semibold" style={{ color: REGISTRY_COLORS.ink }} title={row.farmer_ref}>
-                    {row.farmer_ref}
-                  </span>
-                  <span className="truncate" title={row.region}>
-                    {row.region}
-                  </span>
-                  <span className="truncate" title={row.woreda}>
-                    {row.woreda}
-                  </span>
-                  <span className="truncate capitalize" title={String(row.farming_type || "")}>
-                    {String(row.farming_type || "").replace(/_/g, " ")}
-                  </span>
-                  <span className="text-right">
-                    <StatusPill status={row.record_state} />
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </RegistryCard>
-
-        <RegistryCard
-          dense
           title="Key Indicators"
           className="flex min-h-0 flex-col"
-          bodyClassName="grid min-h-0 flex-1 grid-cols-2 content-center gap-1.5 px-3 pb-2.5 pt-1.5"
+          bodyClassName="grid min-h-0 flex-1 grid-cols-2 content-center gap-2.5 px-3 pb-3 pt-2"
         >
           <RegistryIndicatorTile
-            icon={<BadgeCheck className="h-3.5 w-3.5" />}
+            icon={<BadgeCheck className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.green}
             iconColor={BRIGHT.green}
             value={`${share(recordStates.approved).toFixed(1)}%`}
             label="Approved records"
           />
           <RegistryIndicatorTile
-            icon={<Fingerprint className="h-3.5 w-3.5" />}
+            icon={<Fingerprint className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.teal}
             iconColor={BRIGHT.teal}
             value={`${share(farmersWithId).toFixed(1)}%`}
             label="With national ID"
           />
           <RegistryIndicatorTile
-            icon={<UserRound className="h-3.5 w-3.5" />}
+            icon={<UserRound className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.blue}
             iconColor={BRIGHT.blue}
             value={`${share(withFarmerId).toFixed(1)}%`}
             label="With farmer ID"
           />
           <RegistryIndicatorTile
-            icon={<Sprout className="h-3.5 w-3.5" />}
+            icon={<Sprout className="h-4 w-4" />}
             iconBg={BRIGHT_SOFT.amber}
             iconColor={BRIGHT.amber}
             value={`${share(importedFarmers).toFixed(1)}%`}
@@ -804,7 +747,7 @@ export function FarmerOverviewDashboard({
 
       {/* Goal ribbon */}
       <div
-        className="flex flex-none items-center gap-2 rounded-xl border px-4 py-1 text-[11px]"
+        className="flex flex-none items-center gap-2 rounded-xl border px-4 py-1 text-[15px]"
         style={{ borderColor: "#CBE9D6", background: REGISTRY_COLORS.g100, color: REGISTRY_COLORS.g900 }}
       >
         <strong className="font-semibold">Our Goal:</strong>
@@ -813,11 +756,6 @@ export function FarmerOverviewDashboard({
           services in Ethiopia.
         </span>
         <Leaf className="h-4 w-4 flex-none" style={{ color: REGISTRY_COLORS.g700 }} />
-        <ExportDataButton
-          filters={filters}
-          filePrefix="farmer-profiles"
-          captureTargetId="dashboard-overview"
-        />
       </div>
     </div>
   )

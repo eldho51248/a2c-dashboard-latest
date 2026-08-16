@@ -47,7 +47,7 @@ export function HorizontalStackedBar({
   return (
     <div className={`space-y-3 ${className}`}>
       {title && (
-        <h4 className="text-sm font-semibold text-gray-700">{title}</h4>
+        <h4 className="text-sm font-semibold text-black">{title}</h4>
       )}
       
       <div className="relative">
@@ -92,7 +92,7 @@ export function HorizontalStackedBar({
                   return width > 10 ? (
                     <div
                       key={`label-${item.name}-${index}`}
-                      className="absolute text-xs font-medium text-gray-600 transform -translate-x-1/2"
+                      className="absolute text-xs font-medium text-black transform -translate-x-1/2"
                       style={{ left: `${left}%` }}
                     >
                       {item.name.length > 12 ? `${item.name.substring(0, 10)}...` : item.name}
@@ -113,9 +113,9 @@ export function HorizontalStackedBar({
                   className="w-4 h-4 rounded"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-black">
                   <span className="font-semibold">{item.name}</span>
-                  <span className="text-gray-500 ml-1">
+                  <span className="text-black ml-1">
                     ({item.value.toLocaleString()} - {item.percentage.toFixed(1)}%)
                   </span>
                 </span>

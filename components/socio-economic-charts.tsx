@@ -296,7 +296,7 @@ export function SocioEconomicCharts({ filters, onMapFilterChange, geoJsonData, i
               <h3 className="text-sm text-center  text-muted-foreground mb-3">Household Income Sources</h3>
               {loading ? (
                 <div className="h-[300px] flex items-center justify-center">
-                  <div className="text-gray-500">Loading...</div>
+                  <div className="text-black">Loading...</div>
                 </div>
               ) : (
                 <ChartContainer
@@ -308,8 +308,8 @@ export function SocioEconomicCharts({ filters, onMapFilterChange, geoJsonData, i
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={incomeSourceChartData} margin={{ top: 20, right: 20, left: 10, bottom: 40 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                      <XAxis dataKey="name" stroke="#0B9147" angle={-35} textAnchor="end" height={80} />
-                      <YAxis stroke="#0B9147" hide />
+                      <XAxis dataKey="name" stroke="#000000" angle={-35} textAnchor="end" height={80} />
+                      <YAxis stroke="#000000" hide />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Bar 
                         dataKey="farmers" 
@@ -396,8 +396,8 @@ export function SocioEconomicCharts({ filters, onMapFilterChange, geoJsonData, i
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={householdStatusChartData} margin={{ top: 10, right: 20, left: 10, bottom: 40 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="region" stroke="#666" angle={-45} textAnchor="end" height={100} />
-                  <YAxis stroke="#666" hide />
+                  <XAxis dataKey="region" stroke="#000000" angle={-45} textAnchor="end" height={100} />
+                  <YAxis stroke="#000000" hide />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Legend />
                   <Bar dataKey="male_head" stackId="a" fill={HOUSEHOLD_STATUS_COLORS.male_head} name="Male Heads" />
@@ -415,7 +415,7 @@ export function SocioEconomicCharts({ filters, onMapFilterChange, geoJsonData, i
             <h3 className="text-sm text-center  text-muted-foreground mb-3">Farmers by Age Group and Gender</h3>
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
-                <div className="text-gray-500">Loading...</div>
+                <div className="text-black">Loading...</div>
               </div>
             ) : (
               <ChartContainer
@@ -429,8 +429,8 @@ export function SocioEconomicCharts({ filters, onMapFilterChange, geoJsonData, i
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={ageGroupChartData} margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="age_group" stroke="#666" />
-                    <YAxis stroke="#666" hide />
+                    <XAxis dataKey="age_group" stroke="#000000" />
+                    <YAxis stroke="#000000" hide />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Legend />
                     <Bar dataKey="male" stackId="a" fill={GENDER_COLORS.male} name="Male" />
@@ -468,7 +468,7 @@ export function SocioEconomicCharts({ filters, onMapFilterChange, geoJsonData, i
             <h3 className="text-sm text-center  text-muted-foreground mb-3">PSNP Status</h3>
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
-                <div className="text-gray-500">Loading...</div>
+                <div className="text-black">Loading...</div>
               </div>
             ) : (
                 <ChartContainer

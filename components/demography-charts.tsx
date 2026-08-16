@@ -296,7 +296,7 @@ export function DemographyCharts({ filters, onMapFilterChange, geoJsonData, init
               <h3 className="text-sm text-center  text-muted-foreground mb-3">Farmer Population by Region</h3>
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
-                <div className="text-gray-500">Loading...</div>
+                <div className="text-black">Loading...</div>
               </div>
             ) : (
               <ChartContainer
@@ -348,7 +348,7 @@ export function DemographyCharts({ filters, onMapFilterChange, geoJsonData, init
             <h3 className="text-sm text-center  text-muted-foreground mb-3">Male and Female Farmers by Region</h3>
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
-                <div className="text-gray-500">Loading...</div>
+                <div className="text-black">Loading...</div>
               </div>
             ) : (
               <>
@@ -454,7 +454,7 @@ export function DemographyCharts({ filters, onMapFilterChange, geoJsonData, init
             <h3 className="text-sm text-center  text-muted-foreground mb-3">Age Distribution and Gender</h3>
             {loading ? (
               <div className="h-[300px] flex items-center justify-center">
-                <div className="text-gray-500">Loading...</div>
+                <div className="text-black">Loading...</div>
               </div>
             ) : (
               <ChartContainer

@@ -217,8 +217,8 @@ export function IndicatorCharts({ category, dateRange, selectedCountry }: Indica
                 margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#1e3a8a" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="year" stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#000000" fontSize={12} tickLine={false} axisLine={false} />
                 <ChartTooltip content={<CustomTooltip />} />
                 <Line
                   type="monotone"

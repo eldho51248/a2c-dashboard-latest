@@ -101,7 +101,7 @@ export function EnvironmentIndicatorsCharts({
         {/* CO2 Emissions by Region */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">CO2 Emissions by Region (Tons per Capita)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">CO2 Emissions by Region (Tons per Capita)</h3>
             <ChartContainer
               config={{
                 emissions: { label: "CO2 Emissions", color: "#dc2626" },
@@ -111,8 +111,8 @@ export function EnvironmentIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={co2Data}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="region" stroke="#1e3a8a" angle={-45} textAnchor="end" height={80} />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="region" stroke="#000000" angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="emissions" fill="#dc2626" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -124,7 +124,7 @@ export function EnvironmentIndicatorsCharts({
         {/* Forest Coverage Trends */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Forest Coverage Trends (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Forest Coverage Trends (%)</h3>
             <ChartContainer
               config={{
                 coverage: { label: "Forest Coverage", color: "#059669" },
@@ -134,8 +134,8 @@ export function EnvironmentIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={forestData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="year" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Line
                     type="monotone"
@@ -153,7 +153,7 @@ export function EnvironmentIndicatorsCharts({
         {/* Renewable Energy by Region */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Renewable Energy by Region (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Renewable Energy by Region (%)</h3>
             <ChartContainer
               config={{
                 renewable: { label: "Renewable Energy", color: "#f59e0b" },
@@ -163,8 +163,8 @@ export function EnvironmentIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={renewableData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="region" stroke="#1e3a8a" angle={-45} textAnchor="end" height={80} />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="region" stroke="#000000" angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="renewable" fill="#f59e0b" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -176,7 +176,7 @@ export function EnvironmentIndicatorsCharts({
         {/* Environmental Trends */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Environmental Indicators Trends</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Environmental Indicators Trends</h3>
             <ChartContainer
               config={{
                 co2_emissions: { label: "CO2 Emissions", color: "#dc2626" },
@@ -188,8 +188,8 @@ export function EnvironmentIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={environmentTrendsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="year" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Legend verticalAlign="top" />
 

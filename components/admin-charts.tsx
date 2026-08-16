@@ -142,7 +142,7 @@ export function AdminCharts({ filters, onMapFilterChange, geoJsonData, initialDa
           <h3 className="text-sm text-center  text-muted-foreground mb-3">Uniquely Identified Farmers (NIDP)</h3>
           {loading ? (
             <div className="h-[300px] flex items-center justify-center">
-              <div className="text-gray-500">Loading...</div>
+              <div className="text-black">Loading...</div>
             </div>
           ) : (
             <ChartContainer
@@ -234,7 +234,7 @@ export function AdminCharts({ filters, onMapFilterChange, geoJsonData, initialDa
           <h3 className="text-sm text-center  text-muted-foreground mb-3">Farmers by Farmer ID Status</h3>
           {loading ? (
             <div className="h-[300px] flex items-center justify-center">
-              <div className="text-gray-500">Loading...</div>
+              <div className="text-black">Loading...</div>
             </div>
           ) : (
             <ChartContainer
