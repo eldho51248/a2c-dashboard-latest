@@ -421,11 +421,11 @@ export function FarmerOverviewDashboard({
           title="Registry Snapshot"
           subtitle="Farmers by farming type"
           className="flex min-h-[260px] flex-col @[860px]:min-h-0"
-          bodyClassName="flex min-h-0 flex-1 items-center"
+          bodyClassName="flex min-h-0 flex-1 items-start overflow-hidden"
         >
           <RegistryDonut
             subInline
-            ringSize={190}
+            ringSize={150}
             className="w-full"
             segments={typeSegments}
             centerValue={formatCompact(totalFarmers)}

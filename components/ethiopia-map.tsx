@@ -873,6 +873,12 @@ export function EthiopiaMap({
     ? 'flex items-center justify-center w-[29px] h-[29px] rounded-lg border-[#E6EAE8] bg-white text-[#000000] shadow-sm hover:bg-[#F7FAF8]'
     : 'flex items-center justify-center w-8 h-8 bg-background/80 backdrop-blur-sm'
 
+  // Expand is the primary map action, so it gets a filled brand-teal treatment
+  // instead of blending into the neutral outline buttons beside it.
+  const expandButtonClass = isRegistry
+    ? 'flex items-center justify-center w-[29px] h-[29px] rounded-lg border-transparent bg-[#076E7D] text-white shadow-sm hover:bg-[#0A8496]'
+    : 'flex items-center justify-center w-8 h-8 rounded-md border-transparent bg-[#076E7D] text-white shadow-sm backdrop-blur-sm hover:bg-[#0A8496]'
+
   if (!mounted || loading) {
     return (
       <div
@@ -905,7 +911,7 @@ export function EthiopiaMap({
     <>
       {isExpanded && (
         <div
-          className="fixed inset-0 z-[90] bg-black/50"
+          className="fixed inset-0 z-[90] animate-in bg-black/50 fade-in-0 duration-200"
           onClick={() => setIsExpanded(false)}
           aria-hidden="true"
         />
@@ -913,7 +919,7 @@ export function EthiopiaMap({
       <div
         className={
           isExpanded
-            ? 'fixed inset-6 z-[100] flex flex-col overflow-hidden rounded-xl bg-white shadow-2xl'
+            ? 'fixed inset-6 z-[100] flex animate-in flex-col overflow-hidden rounded-xl bg-white shadow-2xl fade-in-0 zoom-in-95 duration-200'
             : isRegistry
               ? (fill ? 'flex h-full min-h-0 flex-col' : '')
               : 'bg-card rounded-lg'
@@ -934,16 +940,17 @@ export function EthiopiaMap({
         }
         style={isRegistry || isExpanded ? undefined : { height }}
       >
-        <div className={isRegistry ? 'absolute top-3 right-3 z-10 flex gap-1.5' : 'absolute top-0 right-0 z-10 flex gap-2 p-2'}>
+        <div className={isRegistry ? 'absolute top-3 right-3 z-10 flex items-center gap-2.5' : 'absolute top-0 right-0 z-10 flex items-center gap-3 p-2'}>
           <Button
             variant="outline"
             size="icon"
             onClick={() => setIsExpanded((prev) => !prev)}
-            className={toolButtonClass}
+            className={expandButtonClass}
             title={isExpanded ? "Shrink map" : "Expand map"}
           >
             {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
           </Button>
+          <div className={isRegistry ? 'flex gap-1.5' : 'flex gap-2'}>
           {/* List View Button */}
           <Dialog>
             <DialogTrigger asChild>
@@ -1065,6 +1072,7 @@ export function EthiopiaMap({
           >
             <Eye className="h-4 w-4" />
           </Button>
+          </div>
         </div>
         
         {legendPosition === 'overlay' && (

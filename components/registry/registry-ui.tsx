@@ -144,7 +144,7 @@ export function RegistryCard({
 }) {
   return (
     <div
-      className={`relative rounded-xl border bg-white ${className}`}
+      className={`relative overflow-hidden rounded-xl border bg-white ${className}`}
       style={{ borderColor: REGISTRY_COLORS.line, boxShadow: CARD_SHADOW }}
     >
       {(title || actions) && (
@@ -167,7 +167,7 @@ export function RegistryCard({
           {actions && <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">{actions}</div>}
         </div>
       )}
-      <div className={bodyClassName}>{children}</div>
+      <div className={`overflow-hidden ${bodyClassName}`}>{children}</div>
     </div>
   )
 }
@@ -406,8 +406,9 @@ export function RegistryStat({
 
       <div className="min-w-0 flex-1 text-center">
         <div
-          className="text-[16.5px] font-bold leading-snug @[1100px]:text-[18px]"
+          className="truncate text-[16.5px] font-bold leading-snug @[1100px]:text-[18px]"
           style={{ color: wash ? "#000000" : REGISTRY_COLORS.muted }}
+          title={label}
         >
           {label}
         </div>
@@ -470,7 +471,7 @@ export function RegistryIndicatorTile({
         <span className="block text-[20px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
           {value}
         </span>
-        <span className="block text-[14px] font-semibold leading-snug" style={{ color: REGISTRY_COLORS.muted }}>
+        <span className="block truncate text-[14px] font-semibold leading-snug" style={{ color: REGISTRY_COLORS.muted }} title={label}>
           {label}
         </span>
       </span>
@@ -541,7 +542,7 @@ export function AlertRow({
   }[tone]
 
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex min-h-0 items-center gap-2.5 overflow-hidden">
       <span
         className="grid h-7 w-7 flex-none place-items-center rounded-[8px]"
         style={{ background: tones.bg, color: tones.color }}
@@ -557,7 +558,11 @@ export function AlertRow({
             {context}
           </span>
         </span>
-        <span className="mt-0.5 block text-[14.5px] font-medium leading-snug" style={{ color: REGISTRY_COLORS.muted }}>
+        <span
+          className="mt-0.5 line-clamp-2 text-[14.5px] font-medium leading-snug"
+          style={{ color: REGISTRY_COLORS.muted }}
+          title={detail}
+        >
           {detail}
         </span>
       </span>
@@ -614,25 +619,31 @@ export function SegmentRow({
   delta?: KpiDelta
 }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex min-h-0 items-center gap-2 overflow-hidden">
       <span
-        className="grid h-9 w-9 flex-none place-items-center rounded-[9px]"
+        className="grid h-8 w-8 flex-none place-items-center rounded-[8px]"
         style={{ background: iconBg, color: iconColor }}
       >
         {icon}
       </span>
-      <span className="min-w-0 flex-1 text-[16.5px] font-semibold leading-snug" style={{ color: REGISTRY_COLORS.ink2 }}>
-        {label}
-      </span>
-      <span className="flex-none whitespace-nowrap text-right">
-        <strong className="text-[20px] font-bold" style={{ color: REGISTRY_COLORS.ink }}>
-          {value}
-        </strong>
-        {share && (
-          <span className="ml-1.5 text-[15.5px] font-semibold" style={{ color: REGISTRY_COLORS.muted }}>
-            {share}
-          </span>
-        )}
+      <span className="min-w-0 flex-1">
+        <span
+          className="block truncate text-[13.5px] font-semibold leading-tight"
+          style={{ color: REGISTRY_COLORS.muted }}
+          title={label}
+        >
+          {label}
+        </span>
+        <span className="flex items-baseline gap-1">
+          <strong className="text-[18px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
+            {value}
+          </strong>
+          {share && (
+            <span className="whitespace-nowrap text-[13px] font-semibold" style={{ color: REGISTRY_COLORS.muted }}>
+              {share}
+            </span>
+          )}
+        </span>
       </span>
       {delta && <DeltaChip delta={delta} />}
     </div>
