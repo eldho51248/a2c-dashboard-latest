@@ -8,9 +8,9 @@ import React from "react"
 
 export const REGISTRY_COLORS = {
   card: "#FFFFFF",
-  ink: "#111827",
-  ink2: "#4B5563",
-  muted: "#6B7280",
+  ink: "#000000",
+  ink2: "#000000",
+  muted: "#000000",
   line: "#E6EAE8",
   line2: "#EFF2F0",
   g900: "#0F5132",
@@ -144,30 +144,30 @@ export function RegistryCard({
 }) {
   return (
     <div
-      className={`relative rounded-xl border bg-white ${className}`}
+      className={`relative overflow-hidden rounded-xl border bg-white ${className}`}
       style={{ borderColor: REGISTRY_COLORS.line, boxShadow: CARD_SHADOW }}
     >
       {(title || actions) && (
-        <div className={`flex items-start gap-3 ${dense ? "px-3 pt-2" : "px-4 pt-3"}`}>
-          <div className="min-w-0">
+        <div className={`relative ${dense ? "px-3 pt-2" : "px-4 pt-3"}`}>
+          <div className="min-w-0 text-center">
             {title && (
               <h3
-                className={`${dense ? "text-[12px]" : "text-[13.5px]"} font-semibold leading-tight tracking-[-0.1px]`}
+                className={`truncate ${dense ? "text-[16px]" : "text-[17.5px]"} font-bold leading-tight tracking-[-0.1px]`}
                 style={{ color: REGISTRY_COLORS.ink }}
               >
                 {title}
               </h3>
             )}
             {subtitle && (
-              <p className={dense ? "text-[10px]" : "mt-0.5 text-[11px]"} style={{ color: REGISTRY_COLORS.muted }}>
+              <p className={`truncate ${dense ? "text-[13px] font-semibold" : "mt-0.5 text-[14px] font-semibold"}`} style={{ color: REGISTRY_COLORS.muted }}>
                 {subtitle}
               </p>
             )}
           </div>
-          {actions && <div className="ml-auto flex items-center gap-1.5">{actions}</div>}
+          {actions && <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">{actions}</div>}
         </div>
       )}
-      <div className={bodyClassName}>{children}</div>
+      <div className={`overflow-hidden ${bodyClassName}`}>{children}</div>
     </div>
   )
 }
@@ -241,7 +241,7 @@ export function DeltaChip({ delta, className = "" }: { delta: KpiDelta; classNam
 
   return (
     <span
-      className={`whitespace-nowrap rounded-[5px] px-1.5 py-0.5 text-[10px] font-bold ${className}`}
+      className={`whitespace-nowrap rounded-[5px] px-1.5 py-0.5 text-[14px] font-bold ${className}`}
       style={style}
       title={delta.note}
     >
@@ -308,16 +308,16 @@ export function RegistryKpi({
       </div>
 
       <div className="min-w-0">
-        <div className="truncate text-[11.5px] font-medium" style={{ color: wash ? "#334155" : REGISTRY_COLORS.muted }}>
+        <div className="truncate text-[15.5px] font-medium" style={{ color: wash ? "#000000" : REGISTRY_COLORS.muted }}>
           {label}
         </div>
         <div
-          className="text-[22px] font-bold leading-[1.15] tracking-[-0.6px]"
+          className="text-[26px] font-bold leading-[1.15] tracking-[-0.6px]"
           style={{ color: valueColor || REGISTRY_COLORS.ink }}
         >
-          {loading ? <span className="text-[18px] font-semibold opacity-40">—</span> : value}
+          {loading ? <span className="text-[22px] font-semibold opacity-40">—</span> : value}
           {unit && !loading && (
-            <span className="ml-1 text-[13px] font-semibold tracking-normal" style={{ color: REGISTRY_COLORS.ink2 }}>
+            <span className="ml-1 text-[17.5px] font-semibold tracking-normal" style={{ color: REGISTRY_COLORS.ink2 }}>
               {unit}
             </span>
           )}
@@ -326,12 +326,12 @@ export function RegistryKpi({
 
       <div className="col-span-full mt-[11px] flex items-center gap-[7px]">
         {delta && (
-          <span className="whitespace-nowrap rounded-[5px] px-1.5 py-0.5 text-[10.5px] font-bold" style={chipStyle}>
+          <span className="whitespace-nowrap rounded-[5px] px-1.5 py-0.5 text-[14.5px] font-bold" style={chipStyle}>
             {arrow} {Math.abs(delta.percent).toFixed(1)}%
           </span>
         )}
         {delta && (
-          <span className="truncate text-[10.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+          <span className="truncate text-[14.5px] font-medium" style={{ color: REGISTRY_COLORS.muted }}>
             {delta.note}
           </span>
         )}
@@ -386,7 +386,7 @@ export function RegistryStat({
 
   return (
     <div
-      className="flex min-w-0 items-center gap-2 rounded-xl border px-2.5 py-2"
+      className="flex min-w-0 items-center gap-3 rounded-xl border px-3 py-3.5"
       style={{
         background: wash ? `linear-gradient(135deg, ${wash.from} 0%, ${wash.to} 100%)` : REGISTRY_COLORS.card,
         borderColor: wash ? wash.border : REGISTRY_COLORS.line,
@@ -396,45 +396,45 @@ export function RegistryStat({
       <div
         className={
           wash
-            ? "grid h-11 w-11 flex-none place-items-center"
-            : "grid h-[34px] w-[34px] flex-none place-items-center rounded-[10px]"
+            ? "grid h-14 w-14 flex-none place-items-center"
+            : "grid h-[46px] w-[46px] flex-none place-items-center rounded-[12px]"
         }
         style={wash ? { color: iconColor } : { background: iconBg, color: iconColor }}
       >
         {icon}
       </div>
 
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 text-center">
         <div
-          className="truncate text-[10.5px] leading-tight"
-          style={{ color: wash ? "#475569" : REGISTRY_COLORS.muted }}
+          className="truncate text-[16.5px] font-bold leading-snug @[1100px]:text-[18px]"
+          style={{ color: wash ? "#000000" : REGISTRY_COLORS.muted }}
           title={label}
         >
           {label}
         </div>
-        <div className="flex items-baseline gap-1">
+        <div className="flex items-baseline justify-center gap-1">
           <span
-            className="truncate text-[19px] font-bold leading-[1.15] tracking-[-0.6px] @[1100px]:text-[23px]"
+            className="text-[36px] font-extrabold leading-[1.15] tracking-[-0.6px] @[1100px]:text-[40px]"
             style={{ color: valueColor || REGISTRY_COLORS.ink }}
           >
             {loading ? "—" : value}
           </span>
           {unit && !loading && (
-            <span className="text-[11px] font-semibold @[1100px]:text-[12.5px]" style={{ color: REGISTRY_COLORS.ink2 }}>
+            <span className="text-[20px] font-bold @[1100px]:text-[22px]" style={{ color: REGISTRY_COLORS.ink2 }}>
               {unit}
             </span>
           )}
         </div>
         {delta && !loading && (
-          <div className="truncate text-[9.5px] font-semibold leading-tight" style={{ color: deltaColor }}>
+          <div className="text-[14px] font-semibold leading-tight" style={{ color: deltaColor }}>
             {arrow} {Math.abs(delta.percent).toFixed(1)}%{" "}
-            <span className="font-normal" style={{ color: REGISTRY_COLORS.muted }}>
+            <span className="font-medium" style={{ color: REGISTRY_COLORS.muted }}>
               {delta.note}
             </span>
           </div>
         )}
         {!delta && note && !loading && (
-          <div className="truncate text-[9.5px] leading-tight" style={{ color: REGISTRY_COLORS.muted }}>
+          <div className="text-[14px] font-medium leading-tight" style={{ color: REGISTRY_COLORS.muted }}>
             {note}
           </div>
         )}
@@ -460,18 +460,18 @@ export function RegistryIndicatorTile({
   delta?: KpiDelta
 }) {
   return (
-    <div className="flex min-w-0 items-center gap-2 rounded-[10px] px-2 py-1.5" style={{ background: "#F6F8FC" }}>
+    <div className="flex min-w-0 items-center gap-2.5 rounded-[10px] px-2.5 py-3" style={{ background: "#F6F8FC" }}>
       <span
-        className="grid h-[26px] w-[26px] flex-none place-items-center rounded-[8px]"
+        className="grid h-[32px] w-[32px] flex-none place-items-center rounded-[9px]"
         style={{ background: iconBg, color: iconColor }}
       >
         {icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[13px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
+        <span className="block text-[20px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
           {value}
         </span>
-        <span className="block truncate text-[9.5px]" style={{ color: REGISTRY_COLORS.muted }} title={label}>
+        <span className="block truncate text-[14px] font-semibold leading-snug" style={{ color: REGISTRY_COLORS.muted }} title={label}>
           {label}
         </span>
       </span>
@@ -500,21 +500,21 @@ export function ProgressRow({
 
   return (
     <div
-      className="grid items-center gap-2"
-      style={{ gridTemplateColumns: `${icon ? "16px " : ""}minmax(0,1fr) ${barWidth} auto` }}
+      className="grid items-center gap-2.5"
+      style={{ gridTemplateColumns: `${icon ? "16px " : ""}auto minmax(0,1fr) auto` }}
     >
       {icon && (
         <span className="grid h-4 w-4 place-items-center" style={{ color: REGISTRY_COLORS.muted }}>
           {icon}
         </span>
       )}
-      <span className="truncate text-[11px]" style={{ color: REGISTRY_COLORS.ink2 }} title={label}>
+      <span className="max-w-[170px] truncate text-[17px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }} title={label}>
         {label}
       </span>
-      <span className="h-[7px] overflow-hidden rounded-full" style={{ background: "#F1F4F2" }}>
+      <span className="h-[9px] overflow-hidden rounded-full" style={{ background: "#F1F4F2" }}>
         <span className="block h-full rounded-full" style={{ width: `${width}%`, background: color }} />
       </span>
-      <span className="min-w-[40px] text-right text-[11px] font-semibold" style={{ color: REGISTRY_COLORS.ink }}>
+      <span className="min-w-[44px] text-right text-[17px] font-bold" style={{ color: REGISTRY_COLORS.ink }}>
         {value}
       </span>
     </div>
@@ -542,23 +542,27 @@ export function AlertRow({
   }[tone]
 
   return (
-    <div className="flex gap-2">
+    <div className="flex min-h-0 items-center gap-2.5 overflow-hidden">
       <span
-        className="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-[8px]"
+        className="grid h-7 w-7 flex-none place-items-center rounded-[8px]"
         style={{ background: tones.bg, color: tones.color }}
       >
         {icon}
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex items-baseline gap-1.5">
-          <strong className="truncate text-[11px] font-semibold" style={{ color: REGISTRY_COLORS.ink }} title={title}>
+          <strong className="truncate text-[16.5px] font-bold" style={{ color: REGISTRY_COLORS.ink }} title={title}>
             {title}
           </strong>
-          <span className="ml-auto flex-none text-[9.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+          <span className="ml-auto flex-none text-[14px] font-semibold" style={{ color: REGISTRY_COLORS.muted }}>
             {context}
           </span>
         </span>
-        <span className="mt-0.5 block text-[10px] leading-snug" style={{ color: REGISTRY_COLORS.muted }}>
+        <span
+          className="mt-0.5 line-clamp-2 text-[14.5px] font-medium leading-snug"
+          style={{ color: REGISTRY_COLORS.muted }}
+          title={detail}
+        >
           {detail}
         </span>
       </span>
@@ -580,14 +584,14 @@ export function MiniColumnBars({
     <div className="flex min-h-0 flex-1 items-end gap-1.5">
       {items.map((item) => (
         <div key={item.name} className="flex min-w-0 flex-1 flex-col items-center gap-1">
-          <span className="text-[9px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
+          <span className="text-[13px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
             {item.percent.toFixed(0)}%
           </span>
           <span
             className="w-full rounded-t-[3px]"
             style={{ height: `${Math.max(6, (item.percent / max) * 100)}%`, background: color, minHeight: 6 }}
           />
-          <span className="w-full truncate text-center text-[9px]" style={{ color: REGISTRY_COLORS.muted }} title={item.name}>
+          <span className="w-full truncate text-center text-[13px] font-medium" style={{ color: REGISTRY_COLORS.muted }} title={item.name}>
             {item.name}
           </span>
         </div>
@@ -615,23 +619,27 @@ export function SegmentRow({
   delta?: KpiDelta
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex min-h-0 items-center gap-2 overflow-hidden">
       <span
-        className="grid h-7 w-7 flex-none place-items-center rounded-[8px]"
+        className="grid h-8 w-8 flex-none place-items-center rounded-[8px]"
         style={{ background: iconBg, color: iconColor }}
       >
         {icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[11px]" style={{ color: REGISTRY_COLORS.muted }} title={label}>
+        <span
+          className="block truncate text-[13.5px] font-semibold leading-tight"
+          style={{ color: REGISTRY_COLORS.muted }}
+          title={label}
+        >
           {label}
         </span>
-        <span className="flex items-baseline gap-1.5">
-          <strong className="text-[12.5px] font-bold" style={{ color: REGISTRY_COLORS.ink }}>
+        <span className="flex items-baseline gap-1">
+          <strong className="text-[18px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
             {value}
           </strong>
           {share && (
-            <span className="text-[10.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+            <span className="whitespace-nowrap text-[13px] font-semibold" style={{ color: REGISTRY_COLORS.muted }}>
               {share}
             </span>
           )}
@@ -645,16 +653,16 @@ export function SegmentRow({
 /** Boxed figure with a caption, for the small three-up stats inside a panel. */
 export function MiniStat({ value, unit, label }: { value: string; unit?: string; label: string }) {
   return (
-    <div className="rounded-[10px] px-2 py-1.5 text-center" style={{ background: "#F6F8FC" }}>
-      <div className="text-[14px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
+    <div className="rounded-[10px] px-2 py-2.5 text-center" style={{ background: "#F6F8FC" }}>
+      <div className="text-[20px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
         {value}
         {unit && (
-          <span className="ml-0.5 text-[10px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
+          <span className="ml-0.5 text-[14.5px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }}>
             {unit}
           </span>
         )}
       </div>
-      <div className="mt-0.5 truncate text-[9.5px]" style={{ color: REGISTRY_COLORS.muted }} title={label}>
+      <div className="mt-1 text-[14px] font-semibold leading-snug" style={{ color: REGISTRY_COLORS.muted }}>
         {label}
       </div>
     </div>
@@ -678,7 +686,7 @@ export function StatusPill({ status }: { status: string }) {
     .join(" ")
 
   return (
-    <span className="whitespace-nowrap rounded-full px-2 py-0.5 text-[9.5px] font-semibold" style={style}>
+    <span className="whitespace-nowrap rounded-full px-2 py-0.5 text-[13.5px] font-semibold" style={style}>
       {label || "Unknown"}
     </span>
   )
@@ -702,7 +710,7 @@ export function SplitBar({ segments }: { segments: Array<{ name: string; value: 
       </div>
       <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
         {segments.map((segment) => (
-          <span key={segment.name} className="inline-flex items-center gap-1 text-[10px]" style={{ color: REGISTRY_COLORS.ink2 }}>
+          <span key={segment.name} className="inline-flex items-center gap-1 text-[14px] font-medium" style={{ color: REGISTRY_COLORS.ink2 }}>
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: segment.color }} />
             {segment.name}
             <strong style={{ color: REGISTRY_COLORS.ink }}>{((segment.value / total) * 100).toFixed(1)}%</strong>
@@ -742,25 +750,24 @@ export function BarList({
   return (
     <div className={dense ? "flex min-h-0 flex-1 flex-col px-3 pb-2 pt-1" : "px-4 pb-4 pt-2.5"}>
       <div
-        className={`flex justify-between ${dense ? "mb-1 flex-none text-[9.5px]" : "mb-1.5 text-[10px]"}`}
+        className={`flex justify-between font-medium ${dense ? "mb-1 flex-none text-[13.5px]" : "mb-1.5 text-[14px]"}`}
         style={{ color: REGISTRY_COLORS.muted }}
       >
         <span />
         <span>{unitLabel}</span>
       </div>
 
-      <div className={dense ? "grid flex-none gap-1" : "grid gap-1.5"}>
+      <div className={dense ? "grid flex-1 auto-rows-fr gap-2" : "grid gap-1.5"}>
         {items.map((item, index) => (
           <div
             key={item.name}
             className={`grid items-center gap-2 ${
-              dense ? "grid-cols-[52px_minmax(0,1fr)_auto]" : "grid-cols-[58px_minmax(0,1fr)_auto]"
+              dense ? "grid-cols-[92px_minmax(0,1fr)_auto]" : "grid-cols-[100px_minmax(0,1fr)_auto]"
             }`}
           >
             <span
-              className={`truncate ${dense ? "text-[10.5px]" : "text-[11.5px]"}`}
+              className={`font-medium leading-snug ${dense ? "text-[14.5px]" : "text-[15.5px]"}`}
               style={{ color: REGISTRY_COLORS.ink2 }}
-              title={item.name}
             >
               {item.name}
             </span>
@@ -778,7 +785,7 @@ export function BarList({
             </span>
             <span
               className={`whitespace-nowrap text-right font-semibold ${
-                dense ? "min-w-[46px] text-[10.5px]" : "min-w-[52px] text-[11px]"
+                dense ? "min-w-[46px] text-[14.5px]" : "min-w-[52px] text-[15px]"
               }`}
               style={{ color: REGISTRY_COLORS.ink2 }}
             >
@@ -790,14 +797,14 @@ export function BarList({
 
       <div
         className={`relative border-t ${
-          dense ? "mt-1 ml-[60px] mr-[54px] h-3.5 flex-none" : "mt-2 ml-[66px] mr-[60px] h-4"
+          dense ? "mt-1 ml-[100px] mr-[54px] h-3.5 flex-none" : "mt-2 ml-[108px] mr-[60px] h-4"
         }`}
         style={{ borderColor: REGISTRY_COLORS.line2 }}
       >
         {axis.ticks.map((tick, index) => (
           <span
             key={tick}
-            className={`absolute -translate-x-1/2 ${dense ? "top-0.5 text-[9px]" : "top-1 text-[9.5px]"}`}
+            className={`absolute -translate-x-1/2 font-medium ${dense ? "top-0.5 text-[13px]" : "top-1 text-[13.5px]"}`}
             style={{
               left: `${(index / (axis.ticks.length - 1)) * 100}%`,
               color: REGISTRY_COLORS.muted,
@@ -873,7 +880,7 @@ export function RegistryDonut({
       className={`${
         compact
           ? "grid grid-cols-1 justify-items-center gap-1.5 px-3 pb-2.5 pt-1"
-          : "grid items-center gap-2 px-4 pb-4 pt-2"
+          : "grid items-center gap-4 px-4 pb-4 pt-2"
       } ${className}`}
       style={compact ? undefined : { gridTemplateColumns: `${ring}px minmax(0,1fr)` }}
     >
@@ -901,41 +908,41 @@ export function RegistryDonut({
           offset += length
           return element
         })}
-        <text x="100" y="96" textAnchor="middle" className="text-[17px] font-bold" fill={REGISTRY_COLORS.ink}>
+        <text x="100" y="96" textAnchor="middle" className="text-[23px] font-bold" fill={REGISTRY_COLORS.ink}>
           {centerValue}
         </text>
-        <text x="100" y="114" textAnchor="middle" className="text-[9.5px]" fill={REGISTRY_COLORS.muted}>
+        <text x="100" y="114" textAnchor="middle" className="text-[14.5px] font-semibold" fill={REGISTRY_COLORS.muted}>
           {centerLabel}
         </text>
       </svg>
 
-      <div className={`grid w-full min-w-0 ${compact ? "gap-[3px]" : "gap-[7px]"}`}>
+      <div className={`grid w-full min-w-0 ${compact ? "gap-[5px]" : "gap-[11px]"}`}>
         {segments.map((segment) => (
           <div
             key={segment.name}
-            className={`grid grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-x-2 gap-y-0.5 ${compact ? "text-[10.5px]" : "text-[11px]"}`}
+            className={`grid grid-cols-[auto_minmax(0,1fr)_auto] items-baseline gap-x-2 gap-y-0.5 ${compact ? "text-[15px]" : "text-[17px]"}`}
           >
-            <span className="h-2 w-2 flex-none rounded-full" style={{ background: segment.color }} />
-            <span className="truncate" style={{ color: REGISTRY_COLORS.ink2 }} title={segment.name}>
+            <span className="h-2.5 w-2.5 flex-none rounded-full" style={{ background: segment.color }} />
+            <span className="truncate font-semibold" style={{ color: REGISTRY_COLORS.ink2 }} title={segment.name}>
               {segment.name}
             </span>
-            <span className={`whitespace-nowrap text-right font-bold ${compact ? "text-[10.5px]" : "text-[11px]"}`}>
+            <span className={`whitespace-nowrap text-right font-bold ${compact ? "text-[15px]" : "text-[17px]"}`}>
               {((segment.value / total) * 100).toFixed(1)}%
               {segment.sub && subInline && (
-                <span className="ml-1 font-normal" style={{ color: REGISTRY_COLORS.muted }}>
+                <span className="ml-1 font-semibold" style={{ color: REGISTRY_COLORS.muted }}>
                   ({segment.sub})
                 </span>
               )}
             </span>
             {segment.sub && !compact && !subInline && (
-              <span className="col-start-2 col-end-4 -mt-[3px] text-[10px]" style={{ color: REGISTRY_COLORS.muted }}>
+              <span className="col-start-2 col-end-4 -mt-[3px] text-[14.5px] font-medium" style={{ color: REGISTRY_COLORS.muted }}>
                 {segment.sub}
               </span>
             )}
           </div>
         ))}
         <div
-          className={`flex justify-between border-t ${compact ? "mt-0.5 pt-1 text-[10px]" : "mt-1 pt-[7px] text-[11px]"}`}
+          className={`flex justify-between border-t font-semibold ${compact ? "mt-0.5 pt-1.5 text-[14.5px]" : "mt-1.5 pt-2 text-[16.5px]"}`}
           style={{ borderColor: REGISTRY_COLORS.line2, color: REGISTRY_COLORS.muted }}
         >
           <span>{totalLabel}</span>
@@ -956,6 +963,7 @@ export function RankList({
   footer,
   emptyMessage = "No data for the current filters",
   dense = false,
+  colors = BRIGHT_SERIES as unknown as string[],
 }: {
   items: Array<{ name: string; value: number }>
   nameHeader: string
@@ -965,6 +973,8 @@ export function RankList({
   emptyMessage?: string
   /** Tighter spacing that stretches to the parent's height, for single-screen bands. */
   dense?: boolean
+  /** Per-row bar colours, cycled by row index. */
+  colors?: string[]
 }) {
   const max = items.reduce((acc, item) => Math.max(acc, item.value), 0)
 
@@ -975,8 +985,8 @@ export function RankList({
   return (
     <div className={dense ? "flex min-h-0 flex-1 flex-col px-3 pb-2 pt-1" : "px-4 pb-3 pt-2.5"}>
       <div
-        className={`flex justify-between border-b ${
-          dense ? "mb-1 flex-none pb-1 text-[9.5px]" : "mb-1 pb-1.5 text-[10px]"
+        className={`flex justify-between border-b font-medium ${
+          dense ? "mb-1 flex-none pb-1 text-[13.5px]" : "mb-1 pb-1.5 text-[14px]"
         }`}
         style={{ borderColor: REGISTRY_COLORS.line2, color: REGISTRY_COLORS.muted }}
       >
@@ -984,24 +994,24 @@ export function RankList({
         <span>{valueHeader}</span>
       </div>
 
-      <div className={dense ? "grid flex-none gap-[3px]" : ""}>
+      <div className={dense ? "grid flex-1 auto-rows-fr gap-2" : ""}>
         {items.map((item, index) => (
           <div
             key={item.name}
             className={`grid items-center gap-2 ${
-              dense ? "grid-cols-[16px_74px_minmax(0,1fr)_auto]" : "grid-cols-[18px_84px_minmax(0,1fr)_auto] py-[5px]"
+              dense ? "grid-cols-[22px_auto_minmax(0,1fr)_auto]" : "grid-cols-[24px_auto_minmax(0,1fr)_auto] py-[5px]"
             }`}
           >
             <span
-              className={`grid place-items-center rounded-[4px] font-bold ${
-                dense ? "h-[15px] w-[15px] text-[9px]" : "h-4 w-4 text-[9.5px]"
+              className={`grid place-items-center rounded-[5px] font-bold ${
+                dense ? "h-[21px] w-[21px] text-[12px]" : "h-6 w-6 text-[12.5px]"
               }`}
               style={{ background: "#F3F6F4", color: REGISTRY_COLORS.muted }}
             >
               {index + 1}
             </span>
             <span
-              className={`truncate ${dense ? "text-[10.5px]" : "text-[11.5px]"}`}
+              className={`truncate font-medium ${dense ? "max-w-[150px] text-[14.5px]" : "max-w-[170px] text-[15.5px]"}`}
               style={{ color: REGISTRY_COLORS.ink2 }}
               title={item.name}
             >
@@ -1015,11 +1025,11 @@ export function RankList({
                 className="block h-full rounded-[3px]"
                 style={{
                   width: `${max > 0 ? (item.value / max) * 100 : 0}%`,
-                  background: BRIGHT.blueSoft,
+                  background: colors[index % colors.length],
                 }}
               />
             </span>
-            <span className={`whitespace-nowrap font-semibold ${dense ? "text-[10.5px]" : "text-[11px]"}`}>
+            <span className={`whitespace-nowrap font-semibold ${dense ? "text-[14.5px]" : "text-[15px]"}`}>
               {formatter(item.value)}
             </span>
           </div>
@@ -1036,7 +1046,7 @@ export function RankList({
 export function RampLegend({ title, labels }: { title: string; labels: string[] }) {
   return (
     <div className="px-4 pb-3.5">
-      <div className="mb-1.5 text-[10.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+      <div className="mb-1.5 text-[14.5px] font-medium" style={{ color: REGISTRY_COLORS.muted }}>
         {title}
       </div>
       <div className="grid h-[9px] grid-cols-5 overflow-hidden rounded-[3px]">
@@ -1044,7 +1054,7 @@ export function RampLegend({ title, labels }: { title: string; labels: string[] 
           <span key={color} style={{ background: color }} />
         ))}
       </div>
-      <div className="mt-1 grid grid-cols-5 text-[10px]" style={{ color: REGISTRY_COLORS.muted }}>
+      <div className="mt-1 grid grid-cols-5 text-[14px] font-medium" style={{ color: REGISTRY_COLORS.muted }}>
         {labels.map((label) => (
           <span key={label} className="text-center">
             {label}
@@ -1060,7 +1070,7 @@ export function RampLegend({ title, labels }: { title: string; labels: string[] 
 export function EmptyPanel({ message, className = "" }: { message: string; className?: string }) {
   return (
     <div className={`flex min-h-[120px] items-center justify-center ${className}`}>
-      <p className="text-[11.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+      <p className="text-[15.5px]" style={{ color: REGISTRY_COLORS.muted }}>
         {message}
       </p>
     </div>
@@ -1071,7 +1081,7 @@ export function InlineLegend({ items }: { items: Array<{ name: string; color: st
   return (
     <div className="flex justify-end gap-3.5 px-4">
       {items.map((item) => (
-        <span key={item.name} className="inline-flex items-center gap-1.5 text-[11px]" style={{ color: REGISTRY_COLORS.ink2 }}>
+        <span key={item.name} className="inline-flex items-center gap-1.5 text-[15px] font-medium" style={{ color: REGISTRY_COLORS.ink2 }}>
           <span className="h-2 w-2 rounded-full" style={{ background: item.color }} />
           {item.name}
         </span>

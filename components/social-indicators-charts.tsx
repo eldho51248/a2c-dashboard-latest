@@ -204,7 +204,7 @@ export function SocialIndicatorsCharts({
         {/* Education by Gender */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Education Access by Gender (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Education Access by Gender (%)</h3>
             <ChartContainer
               config={{
                 male: { label: "Male", color: "#059669" },
@@ -216,8 +216,8 @@ export function SocialIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={educationData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="year" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Legend verticalAlign="top" />
 
@@ -234,7 +234,7 @@ export function SocialIndicatorsCharts({
         {/* Health by Region */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Health Access by Region (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Health Access by Region (%)</h3>
             <ChartContainer
               config={{
                 value: { label: "Health Access", color: "#dc2626" },
@@ -244,8 +244,8 @@ export function SocialIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={healthData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="region" stroke="#1e3a8a" angle={-45} textAnchor="end" height={80} />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="region" stroke="#000000" angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
 
                   <Bar dataKey="value" fill="#dc2626" radius={[4, 4, 0, 0]} />
@@ -258,7 +258,7 @@ export function SocialIndicatorsCharts({
         {/* Employment Trends */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Employment Rate Trends (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Employment Rate Trends (%)</h3>
             <ChartContainer
               config={{
                 employment: { label: "Employment Rate", color: "#06b6d4" },
@@ -268,8 +268,8 @@ export function SocialIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={employmentData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="year" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                                   <Legend verticalAlign="top" />
 
@@ -283,7 +283,7 @@ export function SocialIndicatorsCharts({
         {/* Literacy by Gender */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Literacy Rate by Gender (%)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Literacy Rate by Gender (%)</h3>
             <ChartContainer
               config={{
                 male: { label: "Male", color: "#059669" },
@@ -295,8 +295,8 @@ export function SocialIndicatorsCharts({
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={literacyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <XAxis dataKey="year" stroke="#000000" />
+                  <YAxis stroke="#000000" />
                   <ChartTooltip content={<ChartTooltipContent />} />
                                   <Legend verticalAlign="top" />
 
@@ -322,13 +322,13 @@ export function SocialIndicatorsCharts({
    {/* Life Expectancy */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Life Expectancy at Birth (Years)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Life Expectancy at Birth (Years)</h3>
             <ChartContainer config={{}} className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={lifeExpectancyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} />
-                  <YAxis stroke="#1e3a8a" fontSize={12} domain={[60, 80]} />
+                  <XAxis dataKey="year" stroke="#000000" fontSize={12} />
+                  <YAxis stroke="#000000" fontSize={12} domain={[60, 80]} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                                   <Legend verticalAlign="top" />
 
@@ -344,13 +344,13 @@ export function SocialIndicatorsCharts({
         {/* Poverty Rate
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Poverty Rate</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Poverty Rate</h3>
             <ChartContainer config={{}} className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={povertyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} />
-                  <YAxis stroke="#1e3a8a" fontSize={12} domain={[0, 120]} />
+                  <XAxis dataKey="year" stroke="#000000" fontSize={12} />
+                  <YAxis stroke="#000000" fontSize={12} domain={[0, 120]} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Area type="monotone" dataKey="urban" name="Urban" stackId="1" stroke="#f59e0b" fill="#f59e0b" />
                   <Area type="monotone" dataKey="rural" name="Rural" stackId="1" stroke="#059669" fill="#059669" />
@@ -364,13 +364,13 @@ export function SocialIndicatorsCharts({
         {/* Internet Access */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Internet Access (% of Population)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Internet Access (% of Population)</h3>
             <ChartContainer config={{}} className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={internetAccessData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} />
-                  <YAxis stroke="#1e3a8a" fontSize={12} domain={[0, 24]} />
+                  <XAxis dataKey="year" stroke="#000000" fontSize={12} />
+                  <YAxis stroke="#000000" fontSize={12} domain={[0, 24]} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                                   <Legend verticalAlign="top" />
 
@@ -385,13 +385,13 @@ export function SocialIndicatorsCharts({
         {/* Human Capital Index */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Human Capital Index (Scale 0-1)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Human Capital Index (Scale 0-1)</h3>
             <ChartContainer config={{}} className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={humanCapitalData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} />
-                  <YAxis stroke="#1e3a8a" fontSize={12} domain={[0.15, 0.6]} />
+                  <XAxis dataKey="year" stroke="#000000" fontSize={12} />
+                  <YAxis stroke="#000000" fontSize={12} domain={[0.15, 0.6]} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                                   <Legend verticalAlign="top" />
 
@@ -407,13 +407,13 @@ export function SocialIndicatorsCharts({
         {/* Literacy Rate (Grouped Bar Chart) */}
         <Card className="bg-white shadow-lg border border-amber-200">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Literacy Rate (% of population 15+)</h3>
+            <h3 className="text-lg font-semibold text-black mb-4">Literacy Rate (% of population 15+)</h3>
             <ChartContainer config={{}} className="h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={literacyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis dataKey="year" stroke="#1e3a8a" fontSize={12} />
-                  <YAxis stroke="#1e3a8a" fontSize={12} domain={[20, 80]} />
+                  <XAxis dataKey="year" stroke="#000000" fontSize={12} />
+                  <YAxis stroke="#000000" fontSize={12} domain={[20, 80]} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                                   <Legend verticalAlign="top" />
 

@@ -39,7 +39,6 @@ import {
   toNumber,
   useRegistryTrend,
 } from "@/components/registry/registry-data"
-import { ExportDataButton } from "@/components/registry/export-button"
 
 const CHART_NAMES = [
   "livestockKpis",
@@ -146,7 +145,7 @@ export function LivestockDashboard({
   if (error) {
     return (
       <RegistryCard title="Livestock Registry">
-        <div className="px-4 pb-5 pt-3 text-[12px]" style={{ color: REGISTRY_COLORS.red }}>
+        <div className="px-4 pb-5 pt-3 text-[16.5px]" style={{ color: REGISTRY_COLORS.red }}>
           Failed to load registry data: {error}
         </div>
       </RegistryCard>
@@ -157,10 +156,10 @@ export function LivestockDashboard({
     <div className="flex h-full min-h-0 flex-col gap-3 @[860px]:grid @[860px]:grid-rows-[auto_auto_minmax(0,1.32fr)_minmax(0,1fr)_auto]">
       {/* Title line */}
       <header className="flex flex-none flex-wrap items-baseline gap-x-2 gap-y-0.5">
-        <h2 className="text-[16px] font-bold leading-tight tracking-[-0.3px]" style={{ color: REGISTRY_COLORS.ink }}>
+        <h2 className="text-[22px] font-bold leading-tight tracking-[-0.3px]" style={{ color: REGISTRY_COLORS.ink }}>
           Livestock Registry
         </h2>
-        <p className="text-[11px]" style={{ color: REGISTRY_COLORS.muted }}>
+        <p className="text-[17px]" style={{ color: REGISTRY_COLORS.muted }}>
           National Livestock Registry Module
         </p>
       </header>
@@ -168,7 +167,7 @@ export function LivestockDashboard({
       {/* Band 1 — KPI ribbon */}
       <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-3 @[860px]:grid-cols-[1.11fr_0.85fr_0.92fr_1.15fr_1.05fr_1.02fr]">
         <RegistryStat
-          icon={<Users className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Users className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           tint="blue"
@@ -178,7 +177,7 @@ export function LivestockDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Home className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Home className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.green}
           iconColor={BRIGHT.green}
           tint="green"
@@ -188,7 +187,7 @@ export function LivestockDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Layers className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Layers className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.orange}
           iconColor={BRIGHT.orange}
           tint="peach"
@@ -198,7 +197,7 @@ export function LivestockDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<MapPinned className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<MapPinned className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.violet}
           iconColor={BRIGHT.violet}
           tint="violet"
@@ -209,7 +208,7 @@ export function LivestockDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<UserRound className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<UserRound className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.pink}
           iconColor={BRIGHT.pink}
           tint="pink"
@@ -219,7 +218,7 @@ export function LivestockDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Milk className="h-7 w-7" strokeWidth={2.5} />}
+          icon={<Milk className="h-9 w-9" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.amber}
           iconColor={BRIGHT.amber}
           tint="amber"
@@ -231,7 +230,7 @@ export function LivestockDashboard({
       </section>
 
       {/* Band 2 — map, species mix, tenure */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.6fr_1.75fr_1.55fr]">
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.3fr_1.6fr_2fr]">
         <RegistryCard
           dense
           title="Livestock Keepers by Region"
@@ -287,7 +286,7 @@ export function LivestockDashboard({
           bodyClassName="flex min-h-0 flex-1 items-center"
         >
           <RegistryDonut
-            ringSize={96}
+            ringSize={260}
             className="w-full"
             segments={tenureSegments}
             centerValue={formatCompact(tenureParcels)}
@@ -370,7 +369,7 @@ export function LivestockDashboard({
 
       {/* Source ribbon */}
       <div
-        className="flex flex-none items-center gap-2 rounded-xl border bg-white px-4 py-1 text-[10.5px]"
+        className="flex flex-none items-center gap-2 rounded-xl border bg-white px-4 py-1 text-[14.5px]"
         style={{ borderColor: REGISTRY_COLORS.line, color: REGISTRY_COLORS.muted }}
       >
         <Layers className="h-3.5 w-3.5 flex-none" style={{ color: BRIGHT.teal }} />
@@ -378,11 +377,6 @@ export function LivestockDashboard({
           Boundaries: geoBoundaries gbOpen ETH ADM1/ADM3 (CC BY 4.0). Species totals come from the national livestock
           census and are not filtered by area.
         </span>
-        <ExportDataButton
-          filters={filters}
-          filePrefix="livestock-registry"
-          captureTargetId="tab-content-livestock-registry"
-        />
       </div>
     </div>
   )

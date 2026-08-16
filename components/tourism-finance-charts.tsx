@@ -90,9 +90,9 @@ export function TourismFinanceCharts() {
                 >
                   <LineChart data={tourismExpenditureData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="year" stroke="#6B7280" />
-                    <YAxis yAxisId="left" stroke="#6B7280" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#6B7280" />
+                    <XAxis dataKey="year" stroke="#000000" />
+                    <YAxis yAxisId="left" stroke="#000000" />
+                    <YAxis yAxisId="right" orientation="right" stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <ChartLegend content={<ChartLegendContent />} />
                     <Line
@@ -139,8 +139,8 @@ export function TourismFinanceCharts() {
                 >
                   <AreaChart data={travelServicesData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="year" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
+                    <XAxis dataKey="year" stroke="#000000" />
+                    <YAxis stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Area type="monotone" dataKey="percentage" stroke="#7C3AED" fill="#7C3AED" fillOpacity={0.6} />
                   </AreaChart>
@@ -168,8 +168,8 @@ export function TourismFinanceCharts() {
                 >
                   <BarChart data={servicesSectorData} layout="horizontal">
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis type="number" stroke="#6B7280" />
-                    <YAxis dataKey="category" type="category" width={120} stroke="#6B7280" />
+                    <XAxis type="number" stroke="#000000" />
+                    <YAxis dataKey="category" type="category" width={120} stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="value" fill="#10B981" radius={[0, 4, 4, 0]} />
                   </BarChart>
@@ -200,8 +200,8 @@ export function TourismFinanceCharts() {
                 >
                   <BarChart data={insuranceFinancialData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                    <XAxis dataKey="year" stroke="#6B7280" />
-                    <YAxis stroke="#6B7280" />
+                    <XAxis dataKey="year" stroke="#000000" />
+                    <YAxis stroke="#000000" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="percentage" fill="#7C3AED" radius={[4, 4, 0, 0]} />
                   </BarChart>

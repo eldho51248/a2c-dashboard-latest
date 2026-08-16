@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Download, Menu, X, Camera } from "lucide-react"
 import { GlobalFiltersSidebar } from "@/components/global-filters-sidebar"
+import { ExportDataButton } from "@/components/registry/export-button"
 import dynamic from "next/dynamic"
 import { DashboardSectionSkeleton } from "@/components/ui/dashboard-skeleton"
 
@@ -38,6 +39,14 @@ export default function DashboardClient({
   // Crop and livestock farming swap the overview for a dedicated registry view.
   const registryView: 'crop' | 'livestock' | null =
     filters.farmingType === 'crop' ? 'crop' : filters.farmingType === 'livestock' ? 'livestock' : null
+
+  const headerTitle =
+    filters.farmingType === 'crop' ? 'Crop Registry' :
+    filters.farmingType === 'livestock' ? 'Livestock Registry' :
+    filters.farmingType === 'mixed' ? 'Mixed Farming Registry' :
+    'Farmer Registry'
+  const exportFilePrefix = registryView === 'crop' ? 'crop-sown-registry' : registryView === 'livestock' ? 'livestock-registry' : 'farmer-profiles'
+  const exportCaptureTargetId = registryView ? `tab-content-${registryView}-registry` : 'dashboard-overview'
   const [regionsLookup, setRegionsLookup] = useState<Map<string, { name: string; id: number }>>(new Map())
   const [zonesLookup, setZonesLookup] = useState<Map<string, { name: string; id: number; regionId?: number }>>(new Map())
   const [woredasLookup, setWoredasLookup] = useState<Map<string, { name: string; id: number; zoneId?: number }>>(new Map())
@@ -273,40 +282,53 @@ export default function DashboardClient({
         />
 
         {/* Right padding keeps the controls clear of the flag artwork. */}
-        <div className="max-w-full flex items-center justify-between relative z-10 gap-4 md:pr-[110px]">
-          <div className="flex items-center space-x-4">
+        <div className="max-w-full grid grid-cols-[auto_1fr_auto] items-center relative z-10 gap-4 md:pr-[110px]">
+          <div className="flex items-center">
             <img
               src="/images/ati_small.jpg"
               alt="Ministry of Finance Logo"
               className="h-10 w-10 md:h-12 rounded-full md:w-12 object-contain"
             />
-            <div className="text-center md:text-left">
-              <h1 className="text-lg md:text-xl font-bold text-white">Farmer Profile Dashboard</h1>
-              <p className="text-white/60 text[10px] md:text-sm">Agricultural Development & Farmer Analytics</p>
+          </div>
+
+          <div className="flex min-w-0 flex-col items-center gap-1">
+            <div className="text-center">
+              <h1 className="text-lg md:text-xl font-bold text-white">{headerTitle}</h1>
+              {filters.farmingType === 'all' && (
+                <p className="text-white/60 text[10px] md:text-sm">Agricultural Development & Farmer Analytics</p>
+              )}
             </div>
-          </div>
 
-          {/* Active Filters Display */}
-          <div className="hidden md:flex flex-1 justify-center px-4 gap-2 flex-wrap">
-            {activeFilterItems.map((filter) => (
-              <div
-                key={filter.key}
-                className="bg-white/10 px-3 py-1 rounded-full text-xs font-medium text-white border border-white/20 flex items-center gap-2"
-              >
-                <span>{filter.label}: {filter.value}</span>
-                <button
-                  onClick={() => clearFilter(filter.key)}
-                  className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
-                  aria-label={`Clear ${filter.label} filter`}
-                >
-                  <X className="h-3 w-3" />
-                </button>
+            {/* Active Filters Display */}
+            {activeFilterItems.length > 0 && (
+              <div className="hidden md:flex justify-center px-4 gap-2 flex-wrap">
+                {activeFilterItems.map((filter) => (
+                  <div
+                    key={filter.key}
+                    className="bg-white/10 px-3 py-1 rounded-full text-xs font-medium text-white border border-white/20 flex items-center gap-2"
+                  >
+                    <span>{filter.label}: {filter.value}</span>
+                    <button
+                      onClick={() => clearFilter(filter.key)}
+                      className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                      aria-label={`Clear ${filter.label} filter`}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
 
-          <div className="flex items-center space-x-2">
-           
+          <div className="flex items-center space-x-2 justify-self-end">
+            <ExportDataButton
+              tone="red"
+              filters={filters}
+              filePrefix={exportFilePrefix}
+              captureTargetId={exportCaptureTargetId}
+            />
+
             {/* <Button
               variant="outline"
               size="sm"

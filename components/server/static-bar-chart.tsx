@@ -29,7 +29,7 @@ export function StaticBarChart({
   return (
     <Card className="border border-border/50 shadow-none">
       <CardContent className="p-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
+        <h3 className="text-lg font-semibold text-black mb-4">{title}</h3>
         <div className="relative" style={{ height: `${height}px` }}>
           <div className="flex items-end justify-around h-full gap-2">
             {data.map((item, index) => {
