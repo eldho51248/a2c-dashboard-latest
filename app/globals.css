@@ -5,13 +5,27 @@
 
 /* Soft fade-in for page and tab content */
 @keyframes pageFade {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes tabFade {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-page-fade {
@@ -178,8 +192,12 @@
     @apply border-border outline-ring/50;
   }
 
+  html,
   body {
     @apply bg-background text-foreground;
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
   }
 }
 
@@ -207,4 +225,8 @@ body h1,
 body h2,
 body h3 {
   font-weight: 800 !important;
+}
+
+#dashboard-root {
+  zoom: 1.1;
 }

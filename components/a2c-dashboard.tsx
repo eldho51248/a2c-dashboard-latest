@@ -109,36 +109,36 @@ const STATUS_LABELS: Record<string, string> = {
 
 /** Lenders are told apart by what kind of institution they are. */
 const PROVIDER_TYPE_ICONS: Record<string, React.ReactNode> = {
-  "Commercial bank": <Landmark className="h-3 w-3" />,
-  Microfinance: <PiggyBank className="h-3 w-3" />,
-  "Development bank": <Building2 className="h-3 w-3" />,
+  "Commercial bank": <Landmark className="h-5 w-5" />,
+  Microfinance: <PiggyBank className="h-5 w-5" />,
+  "Development bank": <Building2 className="h-5 w-5" />,
 }
 
 /** Each product funds a different part of the farm. */
 const PRODUCT_ICONS: Record<string, React.ReactNode> = {
-  "Input Loan": <Sprout className="h-3 w-3" />,
-  "Working Capital": <Wallet className="h-3 w-3" />,
-  "Farm Equipment": <Tractor className="h-3 w-3" />,
-  "Livestock Loan": <PawPrint className="h-3 w-3" />,
-  "Irrigation Loan": <Droplets className="h-3 w-3" />,
+  "Input Loan": <Sprout className="h-5 w-5" />,
+  "Working Capital": <Wallet className="h-5 w-5" />,
+  "Farm Equipment": <Tractor className="h-5 w-5" />,
+  "Livestock Loan": <PawPrint className="h-5 w-5" />,
+  "Irrigation Loan": <Droplets className="h-5 w-5" />,
 }
 
 /** Registry datasets, glyphed by the part of the farmer profile they carry. */
 const DATASET_ICONS: Record<string, React.ReactNode> = {
-  "Farmer Profile": <UserRound className="h-3 w-3" />,
-  "Land Holding": <LandPlot className="h-3 w-3" />,
-  "Crop History": <Wheat className="h-3 w-3" />,
-  "Livestock Holding": <PawPrint className="h-3 w-3" />,
-  "Input Usage": <Package className="h-3 w-3" />,
+  "Farmer Profile": <UserRound className="h-5 w-5" />,
+  "Land Holding": <LandPlot className="h-5 w-5" />,
+  "Crop History": <Wheat className="h-5 w-5" />,
+  "Livestock Holding": <PawPrint className="h-5 w-5" />,
+  "Input Usage": <Package className="h-5 w-5" />,
 }
 
 /** Decline reasons, glyphed by what failed the assessment. */
 const DECLINE_ICONS: Record<string, React.ReactNode> = {
-  "Land holding below product minimum": <LandPlot className="h-3 w-3" />,
-  "Existing arrears with another lender": <Scale className="h-3 w-3" />,
-  "Registry profile incomplete": <ClipboardList className="h-3 w-3" />,
-  "Requested amount above unsecured ceiling": <Banknote className="h-3 w-3" />,
-  "Yield history insufficient for term": <Hourglass className="h-3 w-3" />,
+  "Land holding below product minimum": <LandPlot className="h-5 w-5" />,
+  "Existing arrears with another lender": <Scale className="h-5 w-5" />,
+  "Registry profile incomplete": <ClipboardList className="h-5 w-5" />,
+  "Requested amount above unsecured ceiling": <Banknote className="h-5 w-5" />,
+  "Yield history insufficient for term": <Hourglass className="h-5 w-5" />,
 }
 
 /** ETB amounts read better abbreviated; the currency is fixed programme-wide. */
@@ -352,11 +352,11 @@ export function A2CDashboard({
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 @[860px]:grid @[860px]:grid-rows-[auto_minmax(0,168fr)_minmax(0,200fr)_minmax(0,122fr)_auto]">
+    <div className="flex h-full min-h-0 flex-col gap-2 @[860px]:grid @[860px]:grid-rows-[auto_minmax(0,190fr)_minmax(0,160fr)_minmax(0,1fr)_auto]">
       {/* Band 1 — the credit pipeline end to end */}
-      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-4 @[1180px]:grid-cols-8">
+      <section className="grid flex-none grid-cols-2 gap-3 @[640px]:grid-cols-4">
         <RegistryStat
-          icon={<Landmark className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<Landmark className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           tint="blue"
@@ -367,7 +367,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<FileClock className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<FileClock className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.violet}
           iconColor={BRIGHT.violet}
           tint="violet"
@@ -378,7 +378,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<ShieldCheck className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<ShieldCheck className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.green}
           iconColor={BRIGHT.green}
           tint="green"
@@ -389,7 +389,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<FileCheck2 className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<FileCheck2 className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.sky}
           iconColor={BRIGHT.sky}
           tint="teal"
@@ -400,7 +400,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Files className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<Files className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.teal}
           iconColor={BRIGHT.teal}
           tint="teal"
@@ -411,7 +411,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<BadgeCheck className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<BadgeCheck className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.green}
           iconColor={BRIGHT.green}
           tint="green"
@@ -422,7 +422,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<AlertTriangle className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<AlertTriangle className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.red}
           iconColor={BRIGHT.crimson}
           tint={openDecisions > 0 ? "red" : "green"}
@@ -434,7 +434,7 @@ export function A2CDashboard({
           loading={loading}
         />
         <RegistryStat
-          icon={<Banknote className="h-6 w-6" strokeWidth={2.5} />}
+          icon={<Banknote className="h-8 w-8" strokeWidth={2.5} />}
           iconBg={BRIGHT_SOFT.amber}
           iconColor={BRIGHT.amber}
           tint="amber"
@@ -447,10 +447,10 @@ export function A2CDashboard({
       </section>
 
       {/* Band 2 — where the money landed, and how the funnel converts */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.9fr_1.75fr_1.75fr_1.9fr]">
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[4fr_1.75fr_1.75fr_1.9fr]">
         <RegistryCard
           dense
-          icon={<Map className="h-3 w-3" />}
+          icon={<Map className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.green}
           iconColor={BRIGHT.green}
           title="Loan Distribution"
@@ -481,7 +481,7 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<ShieldCheck className="h-3 w-3" />}
+          icon={<ShieldCheck className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.violet}
           iconColor={BRIGHT.violet}
           title="Consent Outcomes"
@@ -503,7 +503,7 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<PieChart className="h-3 w-3" />}
+          icon={<PieChart className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           title="Loan Book by Status"
@@ -525,16 +525,16 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<TrendingUp className="h-3 w-3" />}
+          icon={<TrendingUp className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.teal}
           iconColor={BRIGHT.teal}
           title="Credit Pipeline"
           subtitle="Conversion at each consent gate"
           className="flex min-h-0 flex-col"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[10px] px-3 pb-2.5 pt-2"
+          bodyClassName="flex min-h-0 flex-1 flex-col justify-between gap-3.5 px-4 pb-4 pt-3.5"
         >
           <SegmentRow
-            icon={<FileClock className="h-3.5 w-3.5" />}
+            icon={<FileClock className="h-5 w-5" />}
             iconBg={BRIGHT_SOFT.violet}
             iconColor={BRIGHT.violet}
             label="Consent requested"
@@ -542,7 +542,7 @@ export function A2CDashboard({
             share="(100%)"
           />
           <SegmentRow
-            icon={<ShieldCheck className="h-3.5 w-3.5" />}
+            icon={<ShieldCheck className="h-5 w-5" />}
             iconBg={BRIGHT_SOFT.green}
             iconColor={BRIGHT.green}
             label="Consent granted"
@@ -550,7 +550,7 @@ export function A2CDashboard({
             share={`(${share(consentsApproved, consentRequests).toFixed(1)}%)`}
           />
           <SegmentRow
-            icon={<Files className="h-3.5 w-3.5" />}
+            icon={<Files className="h-5 w-5" />}
             iconBg={BRIGHT_SOFT.teal}
             iconColor={BRIGHT.teal}
             label="Registry data delivered"
@@ -558,7 +558,7 @@ export function A2CDashboard({
             share={`(${share(dataSharesDelivered, dataSharesTotal).toFixed(1)}%)`}
           />
           <SegmentRow
-            icon={<BadgeCheck className="h-3.5 w-3.5" />}
+            icon={<BadgeCheck className="h-5 w-5" />}
             iconBg={BRIGHT_SOFT.blue}
             iconColor={BRIGHT.blue}
             label="Loan approved"
@@ -572,20 +572,20 @@ export function A2CDashboard({
       <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[3.5fr_2.4fr_2.3fr]">
         <RegistryCard
           dense
-          icon={<Landmark className="h-3 w-3" />}
+          icon={<Landmark className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           title="Onboarded Credit Providers"
           subtitle={`${formatFull(providersOnboarded)} live lenders · ${formatFull(providersOnboarding)} in integration`}
           className="flex min-h-[240px] flex-col overflow-hidden @[860px]:min-h-0"
-          bodyClassName="min-h-0 flex-1 overflow-hidden px-3 pb-2 pt-1"
+          bodyClassName="min-h-0 flex-1 overflow-y-auto px-3 pb-2 pt-1"
         >
           {providers.length === 0 ? (
             <EmptyPanel message="No credit providers onboarded" />
           ) : (
             <div>
               <div
-                className="grid grid-cols-[minmax(0,1.5fr)_44px_44px_66px_46px_auto] gap-2 border-b pb-1 text-[9.5px]"
+                className="grid grid-cols-[3fr_1fr_1fr_1.3fr_1fr_1.1fr] gap-2 border-b pb-1 text-[13.5px] font-bold"
                 style={{ borderColor: REGISTRY_COLORS.line2, color: REGISTRY_COLORS.muted }}
               >
                 <span>Provider</span>
@@ -598,35 +598,35 @@ export function A2CDashboard({
               {providers.map((row: any) => (
                 <div
                   key={row.name}
-                  className="grid grid-cols-[minmax(0,1.5fr)_44px_44px_66px_46px_auto] items-center gap-2 py-[3px] text-[10.5px]"
+                  className="grid grid-cols-[3fr_1fr_1fr_1.3fr_1fr_1.1fr] items-center gap-2 py-1 text-[14.5px]"
                   style={{ color: REGISTRY_COLORS.ink2 }}
                 >
-                  <span className="flex min-w-0 items-baseline gap-1.5">
+                  <span className="flex min-w-0 items-center gap-2">
                     <span
-                      className="grid h-4 w-4 flex-none self-center place-items-center rounded-[5px]"
+                      className="grid h-6 w-6 flex-none self-center place-items-center rounded-[5px]"
                       style={{
                         background: row.status === "ACTIVE" ? BRIGHT_SOFT.blue : BRIGHT_SOFT.amber,
                         color: row.status === "ACTIVE" ? BRIGHT.blue : BRIGHT.amber,
                       }}
                     >
-                      {PROVIDER_TYPE_ICONS[row.providerType] || <Building2 className="h-3 w-3" />}
+                      {PROVIDER_TYPE_ICONS[row.providerType] || <Building2 className="h-4 w-4" />}
                     </span>
                     <span
-                      className="flex-none font-semibold"
+                      className="flex-none font-bold text-[14.5px]"
                       style={{ color: REGISTRY_COLORS.ink }}
                       title={`${row.name} · ${row.integration}`}
                     >
                       {row.shortName}
                     </span>
-                    <span className="truncate text-[9px]" style={{ color: REGISTRY_COLORS.muted }}>
+                    <span className="truncate text-[12.5px] font-medium" style={{ color: REGISTRY_COLORS.muted }}>
                       {row.providerType}
                     </span>
                   </span>
-                  <span className="text-right">{formatFull(row.applications)}</span>
-                  <span className="text-right font-semibold" style={{ color: REGISTRY_COLORS.ink }}>
+                  <span className="text-right font-medium">{formatFull(row.applications)}</span>
+                  <span className="text-right font-bold" style={{ color: REGISTRY_COLORS.ink }}>
                     {formatFull(row.loansApproved)}
                   </span>
-                  <span className="text-right font-semibold" style={{ color: REGISTRY_COLORS.ink }}>
+                  <span className="text-right font-bold" style={{ color: REGISTRY_COLORS.ink }}>
                     {formatCompact(row.loanValue)}
                   </span>
                   <span className="text-right">
@@ -643,14 +643,14 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<AlertTriangle className="h-3 w-3" />}
+          icon={<AlertTriangle className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.red}
           iconColor={BRIGHT.crimson}
           title="Data Sharing Faults"
           subtitle={`${formatFull(dataSharesFailed)} payloads failed of ${formatFull(dataSharesTotal)} sent`}
           actions={<CriticalCountChip count={shareFaults.length} noun="failing" />}
           className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[5px] px-2.5 pb-2 pt-1.5"
+          bodyClassName="grid min-h-0 flex-1 content-start gap-[5px] px-2.5 pb-2 pt-1.5 overflow-y-auto"
         >
           {shareFaults.length === 0 ? (
             <EmptyPanel message="Every registry payload delivered" />
@@ -666,7 +666,7 @@ export function A2CDashboard({
                 />
               ))}
               {shareFaults.length > 5 && (
-                <span className="px-1 text-[9.5px]" style={{ color: REGISTRY_COLORS.muted }}>
+                <span className="px-1 text-[11.5px]" style={{ color: REGISTRY_COLORS.muted }}>
                   +{shareFaults.length - 5} further delivery failures
                 </span>
               )}
@@ -676,7 +676,7 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<TrendingUp className="h-3 w-3" />}
+          icon={<TrendingUp className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.blue}
           iconColor={BRIGHT.blue}
           title="Applications & Approvals"
@@ -746,45 +746,17 @@ export function A2CDashboard({
         </RegistryCard>
       </section>
 
-      {/* Band 4 — locations, products, datasets, declines */}
-      <section className="grid min-h-0 flex-none grid-cols-1 gap-3 @[720px]:grid-cols-2 @[860px]:grid-cols-[2.5fr_2.1fr_2.2fr_2.2fr]">
+      {/* Band 4 — products, datasets, declines */}
+      <section className="grid min-h-0 flex-none grid-cols-1 gap-2 @[720px]:grid-cols-[1.75fr_1.75fr_1.5fr]">
         <RegistryCard
           dense
-          icon={<MapPin className="h-3 w-3" />}
-          iconBg={BRIGHT_SOFT.green}
-          iconColor={BRIGHT.green}
-          title="Programme Locations"
-          subtitle={`${formatFull(farmersEnrolled)} farmers enrolled across ${formatFull(woredasCovered)} woredas`}
-          className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[7px] px-3 pb-2.5 pt-2"
-        >
-          {locations.length === 0 ? (
-            <EmptyPanel message="No enrolled locations" />
-          ) : (
-            locations.map((row: any, index: number) => (
-              <ProgressRow
-                key={row.woreda}
-                icon={<MapPin className="h-3 w-3" />}
-                iconColor={BRIGHT_SERIES[index % BRIGHT_SERIES.length]}
-                label={`${row.woreda} · ${formatFull(row.farmers)} farmers`}
-                value={formatCompact(row.loanValue)}
-                percent={share(row.loanValue, locationValueMax)}
-                color={BRIGHT_SERIES[index % BRIGHT_SERIES.length]}
-                barWidth="48px"
-              />
-            ))
-          )}
-        </RegistryCard>
-
-        <RegistryCard
-          dense
-          icon={<Wallet className="h-3 w-3" />}
+          icon={<Wallet className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.amber}
           iconColor={BRIGHT.amber}
           title="Loan Products"
           subtitle={`${etb(productValueTotal)} approved across ${formatFull(products.length)} products`}
           className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[7px] px-3 pb-2.5 pt-2"
+          bodyClassName="grid min-h-0 flex-1 content-start gap-[6px] px-3.5 pb-2.5 pt-2 overflow-y-auto"
         >
           {products.length === 0 ? (
             <EmptyPanel message="No loan products" />
@@ -792,13 +764,13 @@ export function A2CDashboard({
             products.map((row: any, index: number) => (
               <ProgressRow
                 key={row.name}
-                icon={PRODUCT_ICONS[row.name] || <Banknote className="h-3 w-3" />}
+                icon={PRODUCT_ICONS[row.name] || <Banknote className="h-5 w-5" />}
                 iconColor={BRIGHT_SERIES[index % BRIGHT_SERIES.length]}
                 label={`${row.name} · ${formatFull(row.applications)} apps`}
                 value={formatCompact(row.loanValue)}
                 percent={share(row.loanValue, productValueTotal)}
                 color={BRIGHT_SERIES[index % BRIGHT_SERIES.length]}
-                barWidth="48px"
+                barWidth="60px"
               />
             ))
           )}
@@ -806,13 +778,13 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<Files className="h-3 w-3" />}
+          icon={<Files className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.teal}
           iconColor={BRIGHT.teal}
           title="Registry Datasets Shared"
           subtitle={`${formatFull(recordsShared)} records delivered to lenders`}
           className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[7px] px-3 pb-2.5 pt-2"
+          bodyClassName="grid min-h-0 flex-1 content-start gap-[6px] px-3.5 pb-2.5 pt-2 overflow-y-auto"
         >
           {datasets.length === 0 ? (
             <EmptyPanel message="No datasets shared" />
@@ -820,13 +792,13 @@ export function A2CDashboard({
             datasets.map((row: any, index: number) => (
               <ProgressRow
                 key={row.name}
-                icon={DATASET_ICONS[row.name] || <Files className="h-3 w-3" />}
+                icon={DATASET_ICONS[row.name] || <Files className="h-5 w-5" />}
                 iconColor={row.failed > 0 ? BRIGHT.crimson : BRIGHT_SERIES[index % BRIGHT_SERIES.length]}
                 label={row.failed > 0 ? `${row.name} · ${formatFull(row.failed)} failed` : row.name}
                 value={formatFull(row.shares)}
                 percent={share(row.shares, datasetShareMax)}
                 color={row.failed > 0 ? BRIGHT.crimson : BRIGHT_SERIES[index % BRIGHT_SERIES.length]}
-                barWidth="44px"
+                barWidth="56px"
               />
             ))
           )}
@@ -834,14 +806,14 @@ export function A2CDashboard({
 
         <RegistryCard
           dense
-          icon={<ThumbsDown className="h-3 w-3" />}
+          icon={<ThumbsDown className="h-5 w-5" />}
           iconBg={BRIGHT_SOFT.red}
           iconColor={BRIGHT.crimson}
           title="Why Loans Were Declined"
           subtitle={`${formatFull(loansDeclined)} declined · ${formatFull(loansPending)} awaiting a decision`}
           actions={<CriticalCountChip count={loansDeclined} noun="declined" />}
           className="flex min-h-0 flex-col overflow-hidden"
-          bodyClassName="grid min-h-0 flex-1 content-start gap-[7px] px-3 pb-2.5 pt-2"
+          bodyClassName="grid min-h-0 flex-1 content-start gap-[6px] px-3.5 pb-2.5 pt-2 overflow-y-auto"
         >
           {declineReasons.length === 0 ? (
             <EmptyPanel message="No declined applications" />
@@ -849,13 +821,13 @@ export function A2CDashboard({
             declineReasons.map((row: any) => (
               <ProgressRow
                 key={row.name}
-                icon={DECLINE_ICONS[row.name] || <ShieldX className="h-3 w-3" />}
+                icon={DECLINE_ICONS[row.name] || <ShieldX className="h-5 w-5" />}
                 iconColor={BRIGHT.crimson}
                 label={row.name}
                 value={formatFull(row.applications)}
                 percent={share(row.applications, declineMax)}
                 color={BRIGHT.crimson}
-                barWidth="34px"
+                barWidth="48px"
               />
             ))
           )}

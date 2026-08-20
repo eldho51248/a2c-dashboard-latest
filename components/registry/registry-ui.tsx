@@ -413,7 +413,7 @@ export function RegistryStat({
   const caption =
     delta && !loading ? (
       <div
-        className={large ? "text-[11px] font-semibold leading-tight" : "text-[14px] font-semibold leading-tight"}
+        className={large ? "text-[14px] font-semibold leading-tight text-center" : "text-[14px] font-semibold leading-tight"}
         style={{ color: deltaColor }}
       >
         {arrow} {Math.abs(delta.percent).toFixed(1)}%{" "}
@@ -423,7 +423,7 @@ export function RegistryStat({
       </div>
     ) : !delta && note && !loading ? (
       <div
-        className={large ? "text-[11px] leading-tight" : "text-[14px] font-medium leading-tight"}
+        className={large ? "text-[14px] font-medium leading-tight text-center" : "text-[14px] font-medium leading-tight"}
         style={{ color: REGISTRY_COLORS.muted }}
       >
         {note}
@@ -431,11 +431,11 @@ export function RegistryStat({
     ) : null
 
   const figure = (
-    <div className={`flex items-baseline gap-1 ${large ? "" : "justify-center"}`}>
+    <div className={`flex items-baseline gap-1 justify-center`}>
       <span
         className={
           large
-            ? "truncate text-[26px] font-bold leading-[1.1] tracking-[-0.7px] @[1180px]:text-[28px]"
+            ? "truncate text-[50px] @[1200px]:text-[56px] font-extrabold leading-[1.05] tracking-[-0.8px]"
             : "text-[36px] font-extrabold leading-[1.15] tracking-[-0.6px] @[1100px]:text-[40px]"
         }
         style={{ color: valueColor || REGISTRY_COLORS.ink }}
@@ -445,7 +445,7 @@ export function RegistryStat({
       {unit && !loading && (
         <span
           className={
-            large ? "text-[13px] font-semibold @[1180px]:text-[14px]" : "text-[20px] font-bold @[1100px]:text-[22px]"
+            large ? "text-[20px] font-bold" : "text-[20px] font-bold @[1100px]:text-[22px]"
           }
           style={{ color: REGISTRY_COLORS.ink2 }}
         >
@@ -463,29 +463,27 @@ export function RegistryStat({
 
   if (large) {
     return (
-      <div className="flex min-w-0 flex-col gap-1 rounded-xl border px-3 py-2" style={cardStyle}>
-        <div className="flex items-start gap-2">
+      <div className="flex min-w-0 items-center gap-2 rounded-xl border px-3.5 py-3.5" style={cardStyle}>
+        <div
+          className={
+            wash
+              ? "grid h-14 w-14 flex-none place-items-center"
+              : "grid h-14 w-14 flex-none place-items-center rounded-[12px]"
+          }
+          style={wash ? { color: iconColor } : { background: iconBg, color: iconColor }}
+        >
+          {icon}
+        </div>
+        <div className="min-w-0 flex-1 text-center">
           <div
-            className={
-              wash
-                ? "grid h-8 w-8 flex-none place-items-center"
-                : "grid h-8 w-8 flex-none place-items-center rounded-[9px]"
-            }
-            style={wash ? { color: iconColor } : { background: iconBg, color: iconColor }}
-          >
-            {icon}
-          </div>
-          <div
-            className="min-w-0 flex-1 text-[13px] font-semibold leading-[1.25] @[1180px]:text-[13.5px]"
+            className="text-[16px] font-bold leading-snug truncate"
             style={{ color: wash ? "#475569" : REGISTRY_COLORS.muted }}
             title={label}
           >
             {label}
           </div>
-        </div>
-        <div className="min-w-0">
           {figure}
-          {caption}
+          {caption && <div className="text-center mt-0.5">{caption}</div>}
         </div>
       </div>
     )
@@ -579,21 +577,21 @@ export function ProgressRow({
 
   return (
     <div
-      className="grid items-center gap-2.5"
-      style={{ gridTemplateColumns: `${icon ? "16px " : ""}minmax(0,1fr) ${barWidth} auto` }}
+      className="grid items-center gap-3"
+      style={{ gridTemplateColumns: `${icon ? "22px " : ""}auto minmax(60px, 1fr) auto` }}
     >
       {icon && (
-        <span className="grid h-4 w-4 place-items-center" style={{ color: iconColor || REGISTRY_COLORS.muted }}>
+        <span className="grid h-5 w-5 place-items-center" style={{ color: iconColor || REGISTRY_COLORS.muted }}>
           {icon}
         </span>
       )}
-      <span className="truncate text-[17px] font-semibold" style={{ color: REGISTRY_COLORS.ink2 }} title={label}>
+      <span className="whitespace-nowrap text-[15px] font-bold" style={{ color: REGISTRY_COLORS.ink2 }} title={label}>
         {label}
       </span>
-      <span className="h-[9px] overflow-hidden rounded-full" style={{ background: "#F1F4F2" }}>
+      <span className="h-[9px] w-full overflow-hidden rounded-full" style={{ background: "#F1F4F2" }}>
         <span className="block h-full rounded-full" style={{ width: `${width}%`, background: color }} />
       </span>
-      <span className="min-w-[44px] text-right text-[17px] font-bold" style={{ color: REGISTRY_COLORS.ink }}>
+      <span className="min-w-[44px] text-right text-[15px] font-extrabold" style={{ color: REGISTRY_COLORS.ink }}>
         {value}
       </span>
     </div>
@@ -719,34 +717,34 @@ export function FaultAlert({
 
   return (
     <div
-      className="flex items-center gap-2 rounded-[8px] border-l-[3px] py-1 pl-1.5 pr-2"
+      className="flex items-center gap-3 rounded-[8px] border-l-[3px] py-2 pl-2.5 pr-3"
       style={{ background: tone.wash, borderColor: tone.color }}
     >
       <span
-        className="grid h-5 w-5 flex-none place-items-center rounded-[6px]"
+        className="grid h-6 w-6 flex-none place-items-center rounded-[6px]"
         style={{ background: tone.bg, color: tone.color }}
       >
         {severity === "danger" ? (
-          <CircleAlert className="h-3 w-3" />
+          <CircleAlert className="h-3.5 w-3.5" />
         ) : severity === "warning" ? (
-          <AlertTriangle className="h-3 w-3" />
+          <AlertTriangle className="h-3.5 w-3.5" />
         ) : (
-          <Info className="h-3 w-3" />
+          <Info className="h-3.5 w-3.5" />
         )}
       </span>
       <span className="min-w-0 flex-1">
         <strong
-          className="block truncate text-[10.5px] font-semibold leading-tight"
+          className="block truncate text-[13px] font-bold leading-tight"
           style={{ color: REGISTRY_COLORS.ink }}
           title={title}
         >
           {title}
         </strong>
-        <span className="block truncate text-[9px] leading-tight" style={{ color: tone.color }}>
+        <span className="block truncate text-[11px] leading-tight" style={{ color: tone.color }}>
           {context} · {label ?? tone.label}
         </span>
       </span>
-      <span className="flex-none text-[14px] font-bold leading-none" style={{ color: tone.color }}>
+      <span className="flex-none text-[15.5px] font-extrabold leading-none" style={{ color: tone.color }}>
         {value}
       </span>
     </div>
@@ -802,32 +800,32 @@ export function SegmentRow({
   delta?: KpiDelta
 }) {
   return (
-    <div className="flex min-h-0 items-center gap-2 overflow-hidden">
-      <span
-        className="grid h-8 w-8 flex-none place-items-center rounded-[8px]"
-        style={{ background: iconBg, color: iconColor }}
-      >
-        {icon}
-      </span>
-      <span className="min-w-0 flex-1">
+    <div className="flex min-h-0 items-center justify-between gap-3 overflow-hidden w-full">
+      <div className="flex items-center gap-3 min-w-0">
         <span
-          className="block truncate text-[13.5px] font-semibold leading-tight"
-          style={{ color: REGISTRY_COLORS.muted }}
+          className="grid h-10 w-10 flex-none place-items-center rounded-[10px]"
+          style={{ background: iconBg, color: iconColor }}
+        >
+          {icon}
+        </span>
+        <span
+          className="truncate text-[14.5px] font-bold"
+          style={{ color: REGISTRY_COLORS.ink }}
           title={label}
         >
           {label}
         </span>
-        <span className="flex items-baseline gap-1">
-          <strong className="text-[18px] font-bold leading-tight" style={{ color: REGISTRY_COLORS.ink }}>
-            {value}
-          </strong>
-          {share && (
-            <span className="whitespace-nowrap text-[13px] font-semibold" style={{ color: REGISTRY_COLORS.muted }}>
-              {share}
-            </span>
-          )}
-        </span>
-      </span>
+      </div>
+      <div className="flex items-baseline gap-1.5 flex-none text-right">
+        <strong className="text-[19px] font-extrabold leading-none" style={{ color: REGISTRY_COLORS.ink }}>
+          {value}
+        </strong>
+        {share && (
+          <span className="whitespace-nowrap text-[14px] font-bold" style={{ color: REGISTRY_COLORS.muted }}>
+            {share}
+          </span>
+        )}
+      </div>
       {delta && <DeltaChip delta={delta} />}
     </div>
   )

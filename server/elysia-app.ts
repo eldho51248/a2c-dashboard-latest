@@ -164,6 +164,12 @@ const chartFilterOverrides: Record<string, FilterOverrides> = {
     woreda: 'w.id',
     kebele: 'k.id',
   },
+  villageRegistryTable: {
+    region: 'rp.region',
+    zone: 'rp.zone',
+    woreda: 'w.id',
+    kebele: 'k.id',
+  },
   cropAreaByWoreda: {
     region: 'rp.region',
     zone: 'rp.zone',
@@ -549,53 +555,7 @@ export function createElysiaApp(prefix = '/api') {
         }
       }
     })
-    .get('/dashboard/general', async ({ query }) => {
-      const filters = parseChartFilters(query)
-      return runChartGroup([
-        'farmersByRegion',
-        'farmersByType',
-        'farmersByImportStatus',
-        'farmerKpis',
-        'farmersByAgeAndGender',
-      ], filters)
-    })
-    .get('/dashboard/demography', async ({ query }) => {
-      const filters = parseChartFilters(query)
-      return runChartGroup([
-        'demographyStats',
-        'farmerPopulationByRegion',
-        'genderByRegion',
-        'farmersByEducation',
-        'farmersByAgeAndGender',
-      ], filters)
-    })
-    .get('/dashboard/socio-economic', async ({ query }) => {
-      const filters = parseChartFilters(query)
-      return runChartGroup([
-        'socioEconomicKpis',
-        'householdStatusByGenderRegion',
-        'farmersByAgeGroupGenderRegion',
-        'farmersByRegion',
-        'householdIncomeSources',
-      ], filters)
-    })
-    .get('/dashboard/land', async ({ query }) => {
-      const filters = parseChartFilters(query)
-      return runChartGroup([
-        'landStats',
-        'landAreaByRegion',
-        'farmersByAgeGroupGenderRegion',
-      ], filters)
-    })
-    .get('/dashboard/admin', async ({ query }) => {
-      const filters = parseChartFilters(query)
-      return runChartGroup([
-        'farmerKpis',
-        'farmersByFarmerId',
-        'farmersByRegion',
-      ], filters)
-    })
-  .get('/charts', async ({ query, set }) => {
+    .get('/charts', async ({ query, set }) => {
     try {
       const filters: ServiceChartFilters = {
         region: (query.region as string) || undefined,
