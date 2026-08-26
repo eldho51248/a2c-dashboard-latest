@@ -1,15 +1,8 @@
-# ATI Farmer Profile Dashboard
+# A2C - Access to Credit Dashboard
 
-Next.js dashboard over a local PostgreSQL database shaped like Odoo / OpenG2P farmer registry tables, plus crop, seed, livestock, and location catalogs.
+Next.js dashboard for the Ethiopian Agricultural Transformation Institute (ATI) Access to Credit (A2C) program over PostgreSQL.
 
-Four dashboard types are selectable from the sidebar:
-
-| Dashboard | Shows | Data source |
-|-----------|-------|-------------|
-| **Registries** | Farmer overview, plus crop and livestock registry views, filtered by geography | `scripts/local-schema.sql` + `scripts/seed-local-db.js` |
-| **Catalogs** | National reference data and the health of the connections feeding it | `data/catalog/` |
-| **A2C - Access to Credit** | Consent-driven loan pipeline for Ethiopian credit providers | `data/a2c/` |
-| **DevOps** | Infrastructure health across registry instances, services, hardware and pipelines | `data/devops/` |
+Consent-driven loan pipeline dashboard for Ethiopian credit providers (Cooperative Bank of Oromia, Awash, Dashen, ACSI, OCSSCO, DBE, etc.).
 
 ## Prerequisites
 
@@ -21,11 +14,11 @@ Four dashboard types are selectable from the sidebar:
 ```bash
 npm install
 cp .env.example .env   # set DB_USER / DB_PASSWORD if needed
-npm run db:setup       # create DB, seed farmers, load catalogs + A2C + DevOps
+npm run db:setup       # create DB, seed farmers, load location catalog & A2C sample data
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:9000](http://localhost:9000).
 
 ### Database scripts
 
